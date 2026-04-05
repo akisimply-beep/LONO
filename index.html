@@ -1662,9 +1662,26 @@
         width: 340px;
         height: 500px;
       }
-      .featured-carousel-nav {
-        padding-right: var(--space-16);
-        justify-content: flex-end;
+      .featured-carousel-nav { display: none; }
+      .featured-cards-viewport {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .featured-cards-viewport::-webkit-scrollbar { display: none; }
+      .featured-cards {
+        transition: none !important;
+        transform: none !important;
+        scroll-snap-type: x mandatory;
+      }
+      .featured-card {
+        scroll-snap-align: start;
+        height: 460px !important;
+      }
+      .featured-card-bg {
+        width: 340px;
+        height: 500px;
       }
 
       .section-title, .contacts-title {
@@ -2548,20 +2565,29 @@
       /* Height pattern relative to nav buttons position (index 2 = above buttons = shortest) */
       const BASE_HEIGHTS = [600, 564, 528, 564, 600, 600]; // from original classes
 
+      const isMobile = () => window.innerWidth <= 768;
+
       const updateCarousel = () => {
-        /* Move track */
+        if (isMobile()) {
+          /* Mobile: equal heights, no transform (native scroll via swipe) */
+          track.style.transform = 'none';
+          cards.forEach(card => { card.style.height = ''; });
+          return;
+        }
+
+        /* Desktop: move track via transform */
         const offset = currentIndex * STEP;
         track.style.transform = `translateX(-${offset}px)`;
 
         /* Dynamic card heights — card at visible position 2 (index 2 in view) is shortest */
         cards.forEach((card, i) => {
-          const visiblePos = i - currentIndex; // 0-based visible position
+          const visiblePos = i - currentIndex;
           let height;
-          if (visiblePos === 0) height = 600;       // 1st visible — tall
-          else if (visiblePos === 1) height = 564;   // 2nd — default
-          else if (visiblePos === 2) height = 528;   // 3rd — short (above buttons)
-          else if (visiblePos === 3) height = 564;   // 4th — default
-          else height = 600;                          // others — tall
+          if (visiblePos === 0) height = 600;
+          else if (visiblePos === 1) height = 564;
+          else if (visiblePos === 2) height = 528;
+          else if (visiblePos === 3) height = 564;
+          else height = 600;
           card.style.height = height + 'px';
           card.style.transition = 'height 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease';
         });
@@ -2574,6 +2600,9 @@
         nextBtn.style.pointerEvents = currentIndex >= maxIndex ? 'none' : 'auto';
       };
 
+      /* Re-evaluate on resize */
+      window.addEventListener('resize', updateCarousel);
+
       prevBtn.addEventListener('click', () => {
         if (currentIndex > 0) { currentIndex--; updateCarousel(); }
       });
@@ -2583,9 +2612,10 @@
         if (currentIndex < maxIndex) { currentIndex++; updateCarousel(); }
       });
 
-      /* Touch/drag support */
+      /* Touch/drag support — desktop only */
       let dragStartX = 0, dragDelta = 0, isDragging = false;
       track.addEventListener('pointerdown', (e) => {
+        if (isMobile()) return;
         isDragging = true;
         dragStartX = e.clientX;
         dragDelta = 0;
