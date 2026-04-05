@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LONO — Секція «Послуги» — Прототип</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ─── RESET & BASE ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --sage:        #6D8F7A;
+  --sage-light:  #EBF2EE;
+  --sage-dark:   #2F4D3C;
+  --cream:       #FAF8F4;
+  --warm-white:  #FFFFFF;
+  --text-main:   #1C2B24;
+  --text-muted:  #7A8F84;
+  --border:      #DDE8E2;
+  --accent:      #C8A882;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  --radius:  12px;
+  --radius-lg: 20px;
+  --shadow: 0 2px 20px rgba(44,77,60,.08);
+  --transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+html, body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ════════════════════════════════
+   DEMO CHROME
+════════════════════════════════ */
+#demo-bar {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  background: var(--sage-dark);
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  gap: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,.35);
+}
+.db-label {
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.4);
+  white-space: nowrap;
+}
+.db-label strong { color: #c8ff00; font-weight: 600; }
+
+/* Viewport Switcher */
+.vp-switcher {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0,0,0,.25);
+  border-radius: 9px;
+  padding: 3px;
+  flex-shrink: 0;
+}
+.vp-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255,255,255,.4);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  line-height: 1;
+}
+.vp-btn svg { flex-shrink: 0; }
+.vp-btn:hover { color: rgba(255,255,255,.7); }
+.vp-btn.active {
+  background: rgba(255,255,255,.13);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);
+}
+
+.db-scroll-hint {
+  font-size: 10px;
+  color: rgba(255,255,255,.25);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ════════════════════════════════
+   PREVIEW STAGE
+════════════════════════════════ */
+#preview-stage {
+  transition: background .35s ease, padding .35s ease;
+  background: transparent;
+  padding: 0;
+}
+
+/* Tablet stage */
+#preview-stage.mode-tablet {
+  background: #111;
+  padding: 40px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Mobile stage */
+#preview-stage.mode-mobile {
+  background: #111;
+  padding: 40px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Device wrapper */
+.device-wrap {
+  display: none;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+}
+#preview-stage.mode-tablet .device-wrap,
+#preview-stage.mode-mobile .device-wrap { display: flex; }
+
+/* Width label */
+.device-label {
+  font-size: 10px;
+  color: rgba(255,255,255,.3);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Device chrome */
+.device-chrome {
+  position: relative;
+  background: #1a1a1a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Tablet chrome */
+.mode-tablet .device-chrome {
+  width: 768px;
+  max-width: calc(100vw - 40px);
+  border-radius: 16px;
+  box-shadow: 0 0 0 2px #2a2a2a, 0 0 0 5px #1a1a1a, 0 32px 80px rgba(0,0,0,.7);
+}
+
+/* Mobile chrome */
+.mode-mobile .device-chrome {
+  width: 390px;
+  max-width: calc(100vw - 40px);
+  border-radius: 48px;
+  box-shadow: 0 0 0 10px #1c1c1c, 0 0 0 13px #2d2d2d, 0 40px 100px rgba(0,0,0,.8);
+}
+
+/* Mobile notch */
+.device-notch {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 126px;
+  height: 36px;
+  background: #1a1a1a;
+  border-radius: 0 0 22px 22px;
+  z-index: 100;
+}
+.mode-mobile .device-notch { display: block; }
+
+/* Mobile home bar */
+.device-home {
+  display: none;
+  height: 24px;
+  background: #fff;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.device-home::after {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 5px;
+  background: #1a1a1a;
+  border-radius: 100px;
+  opacity: .18;
+}
+.mode-mobile .device-home { display: flex; }
+
+/* Tablet camera dot */
+.device-camera {
+  display: none;
+  height: 20px;
+  background: #1a1a1a;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.device-camera::after {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: #333;
+  border-radius: 50%;
+}
+.mode-tablet .device-camera { display: flex; }
+
+/* Scrollable content area */
+.device-screen {
+  background: var(--cream);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,.15) transparent;
+}
+.mode-tablet .device-screen { height: 580px; }
+.mode-mobile .device-screen  { height: 700px; padding-top: 36px; }
+.device-screen::-webkit-scrollbar { width: 3px; }
+.device-screen::-webkit-scrollbar-thumb { background: rgba(0,0,0,.12); border-radius: 4px; }
+
+/* ════════════════════════════════
+   SECTION: ПОСЛУГИ
+════════════════════════════════ */
+.services-section {
+  padding: 100px 0 120px;
+  background: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.services-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(109,143,122,.06) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(200,168,130,.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+}
+
+/* Section Header */
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 56px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 16px;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  background: var(--sage);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -.01em;
+}
+.section-title em { font-style: italic; color: var(--sage); }
+.section-subtitle {
+  margin-top: 12px;
+  font-size: 15px;
+  color: var(--text-muted);
+  max-width: 460px;
+  line-height: 1.7;
+}
+.all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--sage-dark);
+  text-decoration: none;
+  border-bottom: 1px solid var(--sage-dark);
+  padding-bottom: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+.all-link:hover { color: var(--sage); border-color: var(--sage); gap: 12px; }
+
+/* Explorer */
+.services-explorer {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: var(--warm-white);
+  min-height: 540px;
+}
+
+/* Tab Nav (left) */
+.tabs-nav {
+  background: var(--sage-dark);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.tabs-nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.tab-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 26px 24px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  text-align: left;
+  color: rgba(255,255,255,.5);
+  transition: var(--transition);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  flex: 1;
+  z-index: 1;
+}
+.tab-btn:last-child { border-bottom: none; }
+.tab-btn:hover { background: rgba(255,255,255,.05); color: rgba(255,255,255,.8); }
+.tab-btn.active { background: rgba(255,255,255,.09); color: #fff; }
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 55%;
+  background: var(--accent);
+  border-radius: 3px 0 0 3px;
+}
+.tab-num {
+  font-family: var(--font-display);
+  font-size: 12px;
+  opacity: .35;
+  min-width: 22px;
+  transition: var(--transition);
+}
+.tab-btn.active .tab-num { opacity: .6; }
+.tab-icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.07);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+.tab-btn.active .tab-icon { background: rgba(200,168,130,.18); }
+.tab-name {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: .01em;
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+.tab-hint {
+  display: block;
+  font-size: 11px;
+  opacity: .45;
+  line-height: 1.3;
+}
+
+/* Content panels (right) */
+.tabs-content { position: relative; overflow: hidden; }
+.tab-panel {
+  position: absolute; inset: 0;
+  padding: 44px 48px;
+  display: flex; flex-direction: column;
+  opacity: 0;
+  transform: translateX(14px);
+  transition: opacity .32s ease, transform .32s ease;
+  pointer-events: none;
+  visibility: hidden;
+  overflow-y: auto;
+}
+.tab-panel.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+  visibility: visible;
+  position: relative;
+}
+
+.panel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 13px;
+  background: var(--sage-light);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sage-dark);
+  margin-bottom: 14px;
+  width: fit-content;
+}
+.panel-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  margin-bottom: 14px;
+}
+.panel-title em { font-style: italic; color: var(--sage); }
+.panel-desc {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  line-height: 1.75;
+  margin-bottom: 28px;
+  max-width: 460px;
+}
+
+/* Sub-service cards */
+.sub-services {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+  flex: 1;
+}
+.sub-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--cream);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text-main);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.sub-card:hover {
+  background: var(--sage-light);
+  border-color: var(--sage);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(109,143,122,.1);
+}
+.sub-inner { display: flex; align-items: center; gap: 10px; }
+.sub-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--sage);
+  flex-shrink: 0;
+  opacity: .45;
+  transition: var(--transition);
+}
+.sub-card:hover .sub-dot { opacity: 1; }
+.sub-name { font-size: 13px; font-weight: 500; line-height: 1.3; }
+.sub-arrow {
+  font-size: 13px;
+  color: var(--text-muted);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: var(--transition);
+}
+.sub-card:hover .sub-arrow { opacity: 1; transform: none; }
+
+/* Panel footer */
+.panel-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 12px 24px;
+  background: var(--sage-dark);
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.btn-primary:hover {
+  background: var(--sage);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(47,77,60,.22);
+}
+.btn-secondary {
+  display: inline-flex; align-items: center;
+  padding: 12px 20px;
+  background: transparent;
+  color: var(--sage-dark);
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.btn-secondary:hover { border-color: var(--sage); color: var(--sage); }
+.panel-stat {
+  margin-left: auto;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 1px;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--sage-dark);
+  line-height: 1;
+}
+.stat-lbl {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* Trust strip */
+.services-trust {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 20px;
+}
+.trust-item {
+  background: var(--warm-white);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.trust-icon { font-size: 20px; flex-shrink: 0; }
+.trust-title { font-size: 12.5px; font-weight: 600; color: var(--text-main); display: block; }
+.trust-sub { font-size: 11.5px; color: var(--text-muted); }
+
+/* ════════════════════════════════
+   MOBILE RESPONSIVE
+   Applied normally at ≤900px window
+   Also injected by JS for mobile/tablet preview
+════════════════════════════════ */
+@media (max-width: 900px) {
+  .services-section { padding: 56px 0 72px; }
+  .container { padding: 0 18px; }
+  .section-header { flex-direction: column; align-items: flex-start; }
+  .all-link { align-self: flex-start; }
+  .section-title { font-size: 28px; }
+  .section-subtitle { font-size: 14px; }
+
+  .services-explorer {
+    grid-template-columns: 1fr;
+    border-radius: var(--radius-lg);
+  }
+  .tabs-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    scrollbar-width: none;
+  }
+  .tabs-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: 14px 10px;
+    min-width: 88px;
+    flex: 1;
+    border-bottom: none;
+    border-right: 1px solid rgba(255,255,255,.07);
+  }
+  .tab-btn:last-child { border-right: none; }
+  .tab-btn.active::after {
+    right: auto; bottom: 0; top: auto;
+    left: 50%; transform: translateX(-50%);
+    width: 55%; height: 3px;
+    border-radius: 3px 3px 0 0;
+  }
+  .tab-num { display: none; }
+  .tab-hint { display: none; }
+  .tab-icon { width: 32px; height: 32px; font-size: 15px; border-radius: 8px; }
+  .tab-name { font-size: 11px; }
+
+  .tabs-content {
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: var(--warm-white);
+    min-height: 460px;
+    overflow: hidden;
+  }
+  .tab-panel.active { position: absolute; }
+  .tab-panel { padding: 24px 20px; }
+
+  .sub-services { grid-template-columns: 1fr; }
+  .panel-footer { flex-direction: column; align-items: stretch; }
+  .panel-stat { display: none; }
+  .btn-primary, .btn-secondary { justify-content: center; }
+
+  .services-trust { grid-template-columns: 1fr; }
+}
+
+/* ════════════════════════════════
+   ANALYSIS SECTION
+════════════════════════════════ */
+.analysis-section {
+  background: var(--sage-dark);
+  color: rgba(255,255,255,.82);
+  padding: 64px 0;
+}
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+.analysis-col h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: #fff;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.analysis-col ul { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+.analysis-col li { display: flex; gap: 11px; font-size: 14px; line-height: 1.55; }
+.analysis-col li::before { content: attr(data-icon); flex-shrink: 0; font-size: 15px; }
+
+.comp-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 4px; }
+.comp-table th {
+  text-align: left;
+  color: rgba(255,255,255,.38);
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.comp-table td {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  vertical-align: top;
+  line-height: 1.45;
+  color: rgba(255,255,255,.7);
+}
+.comp-table td:first-child { color: #fff; font-weight: 500; padding-right: 16px; min-width: 110px; }
+.chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 10.5px;
+  margin: 1px 2px;
+  line-height: 1.6;
+}
+.chip-amber { background: rgba(200,168,130,.22); color: #d4b58e; }
+.chip-green { background: rgba(109,143,122,.25); color: #a3d4b5; }
+.chip-red   { background: rgba(220,80,80,.15);   color: #f09090; }
+
+@media (max-width: 700px) {
+  .analysis-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ DEMO BAR ════════ -->
+<div id="demo-bar">
+  <span class="db-label">🔬 LONO · <strong>Секція «Послуги»</strong></span>
+
+  <div class="vp-switcher" role="group" aria-label="Перемикач вигляду">
+    <button class="vp-btn active" data-vp="desktop" onclick="setVP('desktop',this)">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <rect x="1" y="1.5" width="12" height="8.5" rx="1.2" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M4 12.5h6M7 10v2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      Десктоп
+    </button>
+    <button class="vp-btn" data-vp="tablet" onclick="setVP('tablet',this)">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <rect x="1.5" y=".8" width="11" height="12.4" rx="1.3" stroke="currentColor" stroke-width="1.3"/>
+        <circle cx="7" cy="11.8" r=".7" fill="currentColor"/>
+      </svg>
+      Планшет
+    </button>
+    <button class="vp-btn" data-vp="mobile" onclick="setVP('mobile',this)">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <rect x="3" y=".8" width="8" height="12.4" rx="1.3" stroke="currentColor" stroke-width="1.3"/>
+        <circle cx="7" cy="11.8" r=".7" fill="currentColor"/>
+      </svg>
+      Мобайл
+    </button>
+  </div>
+
+  <span class="db-scroll-hint">↓ аналіз конкурентів</span>
+</div>
+
+<!-- ════════ PREVIEW STAGE ════════ -->
+<div id="preview-stage">
+  <!-- Device chrome (hidden in desktop mode) -->
+  <div class="device-wrap">
+    <div class="device-label" id="device-label">768 × 580px · Tablet</div>
+    <div class="device-chrome">
+      <div class="device-camera"></div>
+      <div class="device-notch"></div>
+      <div class="device-screen" id="device-screen">
+        <!-- content will be moved here by JS -->
+      </div>
+      <div class="device-home"></div>
+    </div>
+  </div>
+
+  <!-- Actual page content -->
+  <div id="page-content">
+
+    <!-- ══ SERVICES SECTION ══ -->
+    <section class="services-section">
+      <div class="container">
+
+        <div class="section-header">
+          <div>
+            <div class="section-label">Напрями</div>
+            <h2 class="section-title">
+              Від першого кроку<br>до <em>вашої дитини</em>
+            </h2>
+            <p class="section-subtitle">
+              Обирайте напрям — і ми разом складемо план. Усе необхідне: консультації, лабораторія, ембріологія — в одному місці.
+            </p>
+          </div>
+          <a href="#" class="all-link">
+            Усі послуги
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <path d="M2.5 7.5h10M9 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Explorer -->
+        <div class="services-explorer" role="tablist">
+
+          <!-- Left: Tab Nav -->
+          <nav class="tabs-nav">
+            <button class="tab-btn active" role="tab" aria-selected="true"
+                    data-tab="repro" onclick="switchTab('repro',this)">
+              <span class="tab-num">01</span>
+              <span class="tab-icon">🌿</span>
+              <span>
+                <span class="tab-name">Репродуктологія</span>
+                <span class="tab-hint">Не вдається завагітніти?</span>
+              </span>
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false"
+                    data-tab="gyn" onclick="switchTab('gyn',this)">
+              <span class="tab-num">02</span>
+              <span class="tab-icon">🩺</span>
+              <span>
+                <span class="tab-name">Гінекологія</span>
+                <span class="tab-hint">Профілактика і жіноче здоров'я</span>
+              </span>
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false"
+                    data-tab="embr" onclick="switchTab('embr',this)">
+              <span class="tab-num">03</span>
+              <span class="tab-icon">🧬</span>
+              <span>
+                <span class="tab-name">Ембріологія</span>
+                <span class="tab-hint">Запліднення, генетика, кріо</span>
+              </span>
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false"
+                    data-tab="lab" onclick="switchTab('lab',this)">
+              <span class="tab-num">04</span>
+              <span class="tab-icon">🔬</span>
+              <span>
+                <span class="tab-name">Лабораторія</span>
+                <span class="tab-hint">Більшість результатів — цього ж дня</span>
+              </span>
+            </button>
+          </nav>
+
+          <!-- Right: Content Panels -->
+          <div class="tabs-content">
+
+            <!-- Репродуктологія -->
+            <div class="tab-panel active" id="tab-repro" role="tabpanel">
+              <div class="panel-badge">🌿 Репродуктологія</div>
+              <h3 class="panel-title">
+                Від діагностики<br>до <em>народження дитини</em>
+              </h3>
+              <p class="panel-desc">
+                Спочатку розбираємось у причині — потім підбираємо метод. Консервативне лікування, ЕКЗ або ICSI — рішення завжди ваше і лікаря разом. Перша консультація: 60 хвилин, без поспіху.
+              </p>
+              <div class="sub-services">
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Діагностика безпліддя</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">ЕКЗ та ICSI</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Консервативне лікування</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Внутрішньоматкова інсемінація</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+              </div>
+              <div class="panel-footer">
+                <a href="#" class="btn-primary">Записатись на консультацію →</a>
+                <a href="#" class="btn-secondary">Про репродуктологію</a>
+                <div class="panel-stat">
+                  <span class="stat-num">14 років</span>
+                  <span class="stat-lbl">досвід провідного лікаря</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Гінекологія -->
+            <div class="tab-panel" id="tab-gyn" role="tabpanel">
+              <div class="panel-badge">🩺 Гінекологія</div>
+              <h3 class="panel-title">
+                Жіноче здоров'я —<br><em>уважно і без поспіху</em>
+              </h3>
+              <p class="panel-desc">
+                Профілактика, лікування та ведення вагітності — в одному місці. На кожному прийомі є час на ваші питання: ми не підганяємо і не залишаємо з незрозумілим.
+              </p>
+              <div class="sub-services">
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Профілактичний огляд</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Кольпоскопія та ПАП-тест</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Лікування ЗПСШ та ендометріозу</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Ведення вагітності</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+              </div>
+              <div class="panel-footer">
+                <a href="#" class="btn-primary">Записатись на огляд →</a>
+                <a href="#" class="btn-secondary">Про гінекологію</a>
+                <div class="panel-stat">
+                  <span class="stat-num">11 років</span>
+                  <span class="stat-lbl">досвід нашого гінеколога</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ембріологія -->
+            <div class="tab-panel" id="tab-embr" role="tabpanel">
+              <div class="panel-badge">🧬 Ембріологія</div>
+              <h3 class="panel-title">
+                Ваш ембріон —<br>під <em>наглядом з першої секунди</em>
+              </h3>
+              <p class="panel-desc">
+                Запліднення, розвиток ембріонів і генетичний скринінг — все в одній лабораторії. Матеріал не виходить за межі клініки: кожен етап під контролем нашого ембріолога.
+              </p>
+              <div class="sub-services">
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Запліднення IVF / ICSI</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Культивування до бластоцисти</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">ПГТ — генетична діагностика</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Кріоконсервація</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+              </div>
+              <div class="panel-footer">
+                <a href="#" class="btn-primary">Записатись на консультацію →</a>
+                <a href="#" class="btn-secondary">Про ембріологію</a>
+                <div class="panel-stat">
+                  <span class="stat-num">8 років</span>
+                  <span class="stat-lbl">ембріолог у нашій лабораторії</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Лабораторія -->
+            <div class="tab-panel" id="tab-lab" role="tabpanel">
+              <div class="panel-badge">🔬 Лабораторія</div>
+              <h3 class="panel-title">
+                Власна лабораторія —<br><em>більшість аналізів</em> цього ж дня
+              </h3>
+              <p class="panel-desc">
+                Здаєте аналізи — отримуєте результат. Без черги на реєстрацію, без направлень в інші заклади, без зайвих кроків між вами і відповіддю.
+              </p>
+              <div class="sub-services">
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Гормональний профіль (АМГ, ФСГ, ТТГ)</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Загальний аналіз крові та сечі</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">ПЛР на ЗПСШ</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+                <a href="#" class="sub-card">
+                  <span class="sub-inner"><span class="sub-dot"></span><span class="sub-name">Генетичні дослідження</span></span>
+                  <span class="sub-arrow">→</span>
+                </a>
+              </div>
+              <div class="panel-footer">
+                <a href="#" class="btn-primary">Замовити аналізи →</a>
+                <a href="#" class="btn-secondary">Про лабораторію</a>
+                <div class="panel-stat">
+                  <span class="stat-num">Сьогодні</span>
+                  <span class="stat-lbl">більшість результатів готові</span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /tabs-content -->
+        </div><!-- /explorer -->
+
+        <!-- Trust strip -->
+        <div class="services-trust">
+          <div class="trust-item">
+            <span class="trust-icon">🏥</span>
+            <span>
+              <span class="trust-title">Все під одним дахом</span>
+              <span class="trust-sub">Консультації, УЗД, лабораторія, ембріологія</span>
+            </span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">⏱</span>
+            <span>
+              <span class="trust-title">60 хвилин на першу консультацію</span>
+              <span class="trust-sub">Достатньо часу на всі ваші питання</span>
+            </span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">📋</span>
+            <span>
+              <span class="trust-title">Доказова медицина</span>
+              <span class="trust-sub">Жодних «на всяк випадок» аналізів</span>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- /services-section -->
+
+    <!-- ══ ANALYSIS SECTION ══ -->
+    <section class="analysis-section">
+      <div class="container">
+        <div style="margin-bottom:44px;">
+          <p style="font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:12px;">Аналіз конкурентів</p>
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,42px);font-weight:400;color:#fff;line-height:1.15;">
+            Що роблять лідери ринку<br>
+            <em style="font-style:italic;color:#a3d4b5;">і що бракує LONO зараз</em>
+          </h2>
+        </div>
+
+        <div class="analysis-grid">
+          <div class="analysis-col">
+            <h3>Порівняння конкурентів</h3>
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>Клініка</th>
+                  <th>Патерн секції</th>
+                  <th>Оцінка</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>IVI / EUGIN<br><small style="opacity:.45;font-size:11px;">Міжнародні</small></td>
+                  <td><span class="chip chip-amber">Vertical tabs</span><span class="chip chip-amber">Фото + опис</span></td>
+                  <td>✅ Глибина<br>✅ Емоційний текст<br>⚠️ Складна нав.</td>
+                </tr>
+                <tr>
+                  <td>Kindbody<br><small style="opacity:.45;font-size:11px;">США</small></td>
+                  <td><span class="chip chip-amber">Lifestyle фото</span><span class="chip chip-amber">Мін. картки</span></td>
+                  <td>✅ Чисто й сучасно<br>✅ Сильна айд.<br>⚠️ Мало деталей</td>
+                </tr>
+                <tr>
+                  <td>Reprolife<br><small style="opacity:.45;font-size:11px;">Україна</small></td>
+                  <td><span class="chip chip-amber">Картки з фото</span><span class="chip chip-amber">Грід</span></td>
+                  <td>✅ Зрозуміло<br>⚠️ Без hover<br>⚠️ Шаблонний вигляд</td>
+                </tr>
+                <tr>
+                  <td>ISIDA / Надія<br><small style="opacity:.45;font-size:11px;">Україна</small></td>
+                  <td><span class="chip chip-amber">Вертик. список</span></td>
+                  <td>✅ Вся інфо є<br>❌ Немає ієрархії<br>❌ Застарілий дизайн</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="analysis-col">
+            <h3>Що відсутнє у LONO зараз</h3>
+            <ul>
+              <li data-icon="❌"><span><strong style="color:#fff">Немає навігації між категоріями.</strong> Всі 4 картки рівнозначні. Топові клініки використовують tabs/accordion.</span></li>
+              <li data-icon="❌"><span><strong style="color:#fff">Bullet-списки замість контексту.</strong> «Кольпоскопія та ПАП-тест» нічого не говорить емоційно.</span></li>
+              <li data-icon="❌"><span><strong style="color:#fff">Немає emotive copy.</strong> Найкращі клініки пишуть не «ЕКЗ та ICSI», а «від діагностики до народження дитини».</span></li>
+              <li data-icon="❌"><span><strong style="color:#fff">Немає мікро-довіри.</strong> Відсутні ім'я лікаря, роки досвіду, «результати сьогодні».</span></li>
+              <li data-icon="❌"><span><strong style="color:#fff">Немає hover / анімацій.</strong> Конкуренти преміум-класу активно використовують інтерактивність.</span></li>
+            </ul>
+            <h3 style="margin-top:32px;">Чому «Category Explorer» — найкращий вибір</h3>
+            <ul>
+              <li data-icon="✅"><span>Вертикальні таби — найпоширеніший патерн преміум євро-клінік (IVI, Eugin, Ferticare).</span></li>
+              <li data-icon="✅"><span>Контент-панель дозволяє писати емоційний підзаголовок для кожного напряму.</span></li>
+              <li data-icon="✅"><span>Мікро-деталі в footer (досвід лікаря, ключовий факт) знімають тривогу.</span></li>
+              <li data-icon="✅"><span>На мобайлі автоматично стає горизонтальними табами — без JavaScript-важкості.</span></li>
+              <li data-icon="✅"><span>Trust strip внизу закріплює позиціонування LONO прямо в секції послуг.</span></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- /#page-content -->
+</div><!-- /#preview-stage -->
+
+
+<script>
+/* ═══════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════ */
+function switchTab(tabId, clickedBtn) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
+  });
+  clickedBtn.classList.add('active');
+  clickedBtn.setAttribute('aria-selected', 'true');
+
+  const cur = document.querySelector('.tab-panel.active');
+  if (!cur) return;
+  cur.style.cssText = 'opacity:0;transform:translateX(-12px);visibility:hidden;pointer-events:none;';
+  setTimeout(() => {
+    cur.classList.remove('active');
+    cur.style.cssText = '';
+    const next = document.getElementById('tab-' + tabId);
+    next.classList.add('active');
+  }, 200);
+}
+
+// Keyboard arrows
+document.querySelectorAll('.tab-btn').forEach((btn, i, all) => {
+  btn.addEventListener('keydown', e => {
+    if (['ArrowDown','ArrowRight'].includes(e.key)) { e.preventDefault(); all[(i+1)%all.length].focus(); all[(i+1)%all.length].click(); }
+    if (['ArrowUp','ArrowLeft'].includes(e.key))   { e.preventDefault(); all[(i-1+all.length)%all.length].focus(); all[(i-1+all.length)%all.length].click(); }
+  });
+});
+
+/* ═══════════════════════════════
+   VIEWPORT SWITCHER
+═══════════════════════════════ */
+const stage       = document.getElementById('preview-stage');
+const pageContent = document.getElementById('page-content');
+const deviceScreen = document.getElementById('device-screen');
+const deviceLabel  = document.getElementById('device-label');
+
+// Dynamic style tag for forced responsive overrides
+const vpStyle = document.createElement('style');
+vpStyle.id = 'vp-override';
+document.head.appendChild(vpStyle);
+
+const MOBILE_CSS = `
+  /* ── Forced mobile layout ── */
+  .services-section { padding: 56px 0 72px !important; }
+  .container { padding: 0 18px !important; }
+  .section-header { flex-direction: column !important; align-items: flex-start !important; }
+  .all-link { align-self: flex-start !important; }
+  .section-title { font-size: 28px !important; }
+  .section-subtitle { font-size: 14px !important; }
+  .services-explorer { grid-template-columns: 1fr !important; }
+  .tabs-nav {
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    border-radius: 20px 20px 0 0 !important;
+    scrollbar-width: none !important;
+  }
+  .tabs-nav::-webkit-scrollbar { display: none !important; }
+  .tab-btn {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 6px !important;
+    padding: 14px 10px !important;
+    min-width: 80px !important;
+    flex: 1 !important;
+    border-bottom: none !important;
+    border-right: 1px solid rgba(255,255,255,.07) !important;
+  }
+  .tab-btn:last-child { border-right: none !important; }
+  .tab-btn.active::after {
+    right: auto !important; bottom: 0 !important; top: auto !important;
+    left: 50% !important; transform: translateX(-50%) !important;
+    width: 55% !important; height: 3px !important;
+    border-radius: 3px 3px 0 0 !important;
+  }
+  .tab-num { display: none !important; }
+  .tab-hint { display: none !important; }
+  .tab-icon { width: 30px !important; height: 30px !important; font-size: 14px !important; }
+  .tab-name { font-size: 10.5px !important; }
+  .tabs-content { border-radius: 0 0 20px 20px !important; background: #fff !important; min-height: 440px !important; overflow: hidden !important; }
+  .tab-panel.active { position: absolute !important; }
+  .tab-panel { padding: 22px 18px !important; }
+  .sub-services { grid-template-columns: 1fr !important; }
+  .panel-footer { flex-direction: column !important; align-items: stretch !important; }
+  .panel-stat { display: none !important; }
+  .btn-primary, .btn-secondary { justify-content: center !important; }
+  .services-trust { grid-template-columns: 1fr !important; }
+  .analysis-grid { grid-template-columns: 1fr !important; }
+`;
+
+const TABLET_CSS = `
+  /* ── Forced tablet layout ── */
+  .services-section { padding: 64px 0 80px !important; }
+  .container { padding: 0 28px !important; }
+  .services-explorer { grid-template-columns: 240px 1fr !important; }
+  .tab-btn { padding: 20px 18px !important; gap: 10px !important; }
+  .tab-hint { display: none !important; }
+  .tab-panel { padding: 32px 36px !important; }
+  .panel-title { font-size: 26px !important; }
+  .analysis-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+`;
+
+function setVP(mode, btn) {
+  // Update buttons
+  document.querySelectorAll('.vp-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Remove mode classes
+  stage.classList.remove('mode-desktop', 'mode-tablet', 'mode-mobile');
+
+  if (mode === 'desktop') {
+    vpStyle.textContent = '';
+    // Move content back to stage (if it was in device-screen)
+    if (!pageContent.parentNode.closest('#preview-stage > #page-content')) {
+      stage.appendChild(pageContent);
+    }
+    deviceScreen.innerHTML = '';
+    stage.style.cssText = '';
+    document.body.style.background = 'var(--cream)';
+
+  } else {
+    // Apply override CSS
+    vpStyle.textContent = mode === 'mobile' ? MOBILE_CSS : TABLET_CSS;
+
+    // Move content into device screen
+    deviceScreen.appendChild(pageContent);
+    stage.classList.add('mode-' + mode);
+    document.body.style.background = '#111';
+
+    // Update label
+    if (mode === 'tablet') {
+      deviceLabel.textContent = '768px · iPad';
+    } else {
+      deviceLabel.textContent = '390px · iPhone';
+    }
+  }
+}
+
+// Ensure page-content is direct child of stage on init
+stage.insertBefore(pageContent, stage.querySelector('.device-wrap').nextSibling || null);
+</script>
+</body>
+</html>

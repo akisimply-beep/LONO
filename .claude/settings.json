@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(open *.html)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(find * -name *.html)",
+      "Bash(find * -name *.md)"
+    ],
+    "deny": [
+      "Bash(git push --force)",
+      "Bash(rm -rf *)"
+    ]
+  }
+}

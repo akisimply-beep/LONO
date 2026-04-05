@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LONO — Website Workflow Checklist</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Unbounded:wght@300;400;700&display=swap');
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --border: #222;
+    --accent: #c8ff00;
+    --accent2: #ff6b35;
+    --accent3: #6bc8ff;
+    --text: #e8e8e8;
+    --muted: #555;
+    --done: #1a2200;
+    --done-border: #3d5a00;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,255,0,.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,255,0,.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .shell {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .label-tag {
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(20px, 4vw, 32px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+    letter-spacing: .04em;
+  }
+
+  .progress-ring-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 80px;
+  }
+
+  .ring-label { font-size: 10px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+
+  .ring-pct {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+
+  svg.ring { transform: rotate(-90deg); }
+
+  /* Meta bar */
+  .meta-bar {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 10px;
+    letter-spacing: .05em;
+  }
+
+  .meta-item { display: flex; flex-direction: column; gap: 3px; }
+  .meta-key { color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+  .meta-val { color: var(--text); }
+  .meta-val.accent { color: var(--accent); }
+  .meta-val.warn { color: var(--accent2); }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+    padding: 6px 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all .15s;
+  }
+
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,255,0,.07); }
+
+  .reset-btn {
+    margin-left: auto;
+    background: none;
+    border: 1px solid #333;
+    color: #444;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+    padding: 6px 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all .15s;
+  }
+
+  .reset-btn:hover { color: var(--accent2); border-color: var(--accent2); }
+
+  /* Phase */
+  .phase {
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .phase.hidden { display: none; }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color .15s;
+  }
+
+  .phase.open .phase-header { border-bottom-color: var(--border); }
+
+  .phase-num {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 24px;
+  }
+
+  .phase-title-wrap { flex: 1; }
+
+  .phase-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .05em;
+  }
+
+  .phase-subtitle {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: .03em;
+  }
+
+  .phase-meta { font-size: 10px; color: var(--muted); letter-spacing: .05em; white-space: nowrap; }
+
+  .phase-chevron { font-size: 10px; color: var(--muted); transition: transform .2s; }
+  .phase.open .phase-chevron { transform: rotate(180deg); }
+
+  .phase-bar { height: 2px; background: #1e1e1e; margin: 0 18px; overflow: hidden; }
+  .phase.open .phase-bar { display: none; }
+  .phase-bar-fill { height: 100%; background: var(--accent); transition: width .4s ease; }
+
+  /* Tasks */
+  .tasks { display: none; padding: 8px 0; }
+  .phase.open .tasks { display: block; }
+
+  .task-group-label {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: 10px 18px 4px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+
+  .task-group-label:first-child { border-top: none; margin-top: 0; }
+
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: background .1s;
+    border-left: 2px solid transparent;
+  }
+
+  .task:hover { background: rgba(255,255,255,.03); }
+
+  .task.done {
+    background: var(--done);
+    border-left-color: var(--done-border);
+  }
+
+  .task.done .task-text { color: var(--muted); text-decoration: line-through; }
+
+  .checkbox {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--muted);
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s;
+  }
+
+  .task.done .checkbox { border-color: var(--accent); background: var(--accent); }
+
+  .check-icon { width: 8px; height: 8px; display: none; }
+  .task.done .check-icon { display: block; }
+
+  .task-body { flex: 1; min-width: 0; }
+
+  .task-text { font-size: 12px; line-height: 1.5; transition: color .15s; }
+
+  .task-hint {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 3px;
+    letter-spacing: .03em;
+    line-height: 1.4;
+  }
+
+  .task-hint a { color: var(--accent3); text-decoration: none; }
+  .task-hint a:hover { text-decoration: underline; }
+
+  .badge {
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+
+  .badge-validate { border: 1px solid var(--accent2); color: var(--accent2); }
+  .badge-p1 { border: 1px solid var(--accent); color: var(--accent); }
+  .badge-info { border: 1px solid #444; color: #666; }
+
+  /* All done */
+  .all-done {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+    border: 1px solid var(--done-border);
+    background: var(--done);
+    margin-top: 16px;
+  }
+
+  .all-done.visible { display: block; }
+
+  .all-done-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 20px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .all-done-sub { font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #333; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="header">
+    <div class="title-block">
+      <div class="label-tag">// LONO · Клініка репродуктології та жіночого здоров'я</div>
+      <h1>Website<br><span>Checklist</span></h1>
+      <div class="subtitle">Дедлайн: 01.05.2026 · Позиціонування: Преміум · lono.clinic</div>
+    </div>
+    <div class="progress-ring-wrap">
+      <svg class="ring" width="64" height="64" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="26" fill="none" stroke="#1e1e1e" stroke-width="4"/>
+        <circle id="ring-progress" cx="32" cy="32" r="26" fill="none"
+          stroke="#c8ff00" stroke-width="4"
+          stroke-dasharray="163.36"
+          stroke-dashoffset="163.36"
+          stroke-linecap="square"
+          style="transition: stroke-dashoffset .4s ease"/>
+      </svg>
+      <div class="ring-pct" id="pct-label">0%</div>
+      <div class="ring-label">прогрес</div>
+    </div>
+  </div>
+
+  <div class="meta-bar">
+    <div class="meta-item">
+      <span class="meta-key">Контакт</span>
+      <span class="meta-val">Ірина Бабій · iryyna.babii@gmail.com</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-key">Аудиторія</span>
+      <span class="meta-val">① Гін. огляд ② Безпліддя ③ Планування вагітності ④ Чоловіче здоров'я</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-key">Тон</span>
+      <span class="meta-val">Теплий, спокій, довіра, надія, турбота</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-key">Мови</span>
+      <span class="meta-val accent">УКР · ENG · PL (згодом)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-key">Дедлайн</span>
+      <span class="meta-val warn">01.05.2026</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="filter-btn active" data-filter="all">Всі</button>
+    <button class="filter-btn" data-filter="todo">Очікують</button>
+    <button class="filter-btn" data-filter="done">Виконані</button>
+    <button class="reset-btn" id="reset-btn">↺ Скинути</button>
+  </div>
+
+  <div id="phases"></div>
+  <div class="all-done" id="all-done">
+    <div class="all-done-title">LONO готова до запуску ✓</div>
+    <div class="all-done-sub">Усі кроки виконано — клініка онлайн</div>
+  </div>
+
+</div>
+
+<script>
+const DATA = [
+  {
+    id: 1,
+    title: "Product Analysis",
+    subtitle: "Аналіз та вимоги",
+    tasks: [
+      {
+        group: "Аудиторія та ринок",
+        items: [
+          { id: "1-1", text: "Затвердити портрети цільової аудиторії (4 сегменти)", hint: "1️⃣ Хочу пройти гінекологічний огляд (найширший сегмент, вхідна точка). 2️⃣ Не вдається завагітніти (емоційно найважчий, потребує максимальної довіри). 3️⃣ Планую вагітність (проактивний, орієнтований на пакети). 4️⃣ Чоловіче здоров'я (уролог-андролог, спермограма — окремий шлях на сайті)." },
+          { id: "1-2", text: "Провести аналіз конкурентів", hint: "Клініка Драгомирецьких, Люмеда, Лікарня св. Анни — структура, УТП, тон. Рефи: <a href='https://reprolife.ua' target='_blank'>reprolife.ua</a> (відео-банери), <a href='https://medspace.lviv.ua' target='_blank'>medspace.lviv.ua</a> (фото персоналу)" },
+          { id: "1-3", text: "Визначити головні страхи пацієнтів", hint: "Довіра лікарям, компетентність, делікатність теми. Що знижує тривогу на сайті?" },
+        ]
+      },
+      {
+        group: "PRD та стратегія",
+        items: [
+          { id: "1-4", text: "Сформулювати бізнес-гіпотезу сайту", hint: "«Сайт допомагає жінкам 25–45 знайти клініку з довірою, записатись та стати постійним пацієнтом»" },
+          { id: "1-5", text: "Визначити КРІ успіху сайту", hint: "% онлайн-записів, кількість нових пацієнтів, повторні візити. Залучити клієнта на прийом/УЗД і зробити постійним." },
+          { id: "1-6", text: "Скласти PRD: цілі, сценарії, обмеження", hint: "Цілі: запис на консультацію, продаж пакетів, формування довіри, залучення нових пацієнтів. Головна дія — онлайн-запис." },
+          { id: "1-7", text: "Валідація PRD: чи все покриває цілі замовника?", hint: "Перевірити на протиріччя. Узгодити з Іриною Бабій.", validate: true },
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: "Business Analysis",
+    subtitle: "Структура та контент-план",
+    tasks: [
+      {
+        group: "Архітектура сайту",
+        items: [
+          { id: "2-1", text: "Затвердити фінальний sitemap — меню 4 пункти", hint: "ПАКЕТИ | ПОСЛУГИ | КОМАНДА | КОНТАКТИ. Всередині: Послуги = Репродуктологія + Гінекологія + Ембріологія + Лабораторія. Команда = Про нас + Лікарі (рівноцінно). Контакти = адреса + FAQ + Блог + Вакансії." },
+          { id: "2-2", text: "Сформувати повний список сторінок з пріоритетами", hint: "Пріоритет 1: ICSI, Гінеколог, Репродуктолог, Пренатальна УЗД. Пріоритет 2 — решта. Запустити поетапно." },
+          { id: "2-3", text: "Деталізувати 4 пакети послуг (разом із замовником)", hint: "Гінек. чекап S/M/L, Підготовка вагітності (3 пакети), Свідоме батьківство, Урологічний чекап S/M/L. Контент та ціни — узгодити." },
+        ]
+      },
+      {
+        group: "Контент та функції",
+        items: [
+          { id: "2-4", text: "Розбити sitemap на Stories (1 сторінка = 1 Story)", hint: "Визначити структуру кожної сторінки: заголовок, блоки, CTA, фото/відео." },
+          { id: "2-5", text: "Прописати контент-блоки Головної сторінки", hint: "Header → Short video slider → Пакети послуг → Всі послуги по категоріях → Клініка → Лікарка Лідія Сегедій → Footer" },
+          { id: "2-6", text: "Узгодити розділи: Блог ✓, FAQ ✓, Ціни ✓, Документи ✗, Успіхи ✗", hint: "Блог — так. FAQ — так. Ціни — тільки в пакетах. Документи та Успіхи — не потрібні (поки)." },
+          { id: "2-7", text: "Прописати стратегію утримання пацієнтів", hint: "Багато клієнтів здали аналіз і не повернулись — продумати email / нагадування / CTA після першого візиту." },
+          { id: "2-8", text: "Перевірити покриття: кожна вимога з PRD має Story?", validate: true },
+        ]
+      },
+      {
+        group: "SEO-стратегія",
+        items: [
+          { id: "2-9", text: "Розробити SEO-стратегію (є підтвердження від замовника)", hint: "Ключові запити: гінеколог Львів, репродуктолог Львів, ЕКЗ Львів, гінекологічний чекап. Список запитів — підготувати." },
+          { id: "2-10", text: "Визначити URL-структуру та мовні версії", hint: "UK головна, /en/, /pl/ — підготувати архітектуру hreflang." },
+        ]
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "UI/UX Design",
+    subtitle: "Проектування інтерфейсу",
+    tasks: [
+      {
+        group: "Брендинг та стиль",
+        items: [
+          { id: "3-1", text: "Зібрати всі наявні бренд-активи", hint: "Логотип у векторі ✓. Брендбук — відсутній. Фото клініки/лікарів — частково. Відео — планується зйомка." },
+          { id: "3-2", text: "Затвердити фірмовий стиль на основі наявних матеріалів", hint: "Кольори: темно-синій, графітовий, бежевий, білий, дерево. Тон: теплий, сімейний, преміальний." },
+          { id: "3-3", text: "Скласти moodboard та рефи для дизайнера", hint: "Рефи замовника: reprolife.ua (відео-банери), medspace.lviv.ua (фото персоналу). Задача — спокій + довіра + надія." },
+        ]
+      },
+      {
+        group: "Макети",
+        items: [
+          { id: "3-4", text: "Підготувати wireframes ключових сторінок", hint: "Головна, Сторінка послуги, Картка лікаря, Форма запису, Пакети послуг" },
+          { id: "3-5", text: "Створити mobile-first макети (Figma)", hint: "Починати з мобільного — більшість аудиторії жінки з телефону" },
+          { id: "3-6", text: "Створити desktop-варіанти макетів" },
+          { id: "3-7", text: "Розробити блок «Лікар Лідія Сегедій» — ключовий trust-builder", hint: "Відео-звернення лікаря. Чому саме до неї? Досвід, підхід, деталі. Окремий акцент на сторінці." },
+          { id: "3-8", text: "Спроектувати блок «Відео-візитки лікарів»", hint: "Відео кожного лікаря: чому до мене? Продають довіру краще ніж текст." },
+          { id: "3-9", text: "Ревізія дизайну: преміум + довіра + медичний контекст", validate: true },
+          { id: "3-10", text: "Узгодити дизайн-систему (компоненти, UI kit, spacing, типографіка)" },
+        ]
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: "Implementation",
+    subtitle: "Розробка сайту",
+    tasks: [
+      {
+        group: "Підготовка",
+        items: [
+          { id: "4-1", text: "Вибрати технологічний стек", hint: "Враховуючи багатомовність UK/EN/PL, блог, SEO, онлайн-запис — рекомендовано Next.js або Astro" },
+          { id: "4-2", text: "Налаштувати репозиторій, CI/CD, staging-середовище" },
+          { id: "4-3", text: "Підготувати контент: тексти, фото, відео від замовника", hint: "Координувати зйомку. Підготувати медичний переклад EN + PL (замовник підтвердив)." },
+        ]
+      },
+      {
+        group: "Головна сторінка",
+        items: [
+          { id: "4-4", text: "Розробити Header + мега-меню (4 пункти)", hint: "ПАКЕТИ | ПОСЛУГИ | КОМАНДА | КОНТАКТИ. Послуги — мега-меню з 4 підрозділами. Команда — Про нас + Лікарі. Контакти — адреса + FAQ + Блог + Вакансії." },
+          { id: "4-5", text: "Розробити Short Video Slider (hero)", hint: "Відеоконтент від замовника — планується зйомка" },
+          { id: "4-6", text: "Розробити блок «Пакети послуг» з цінами", hint: "Ціни тільки тут — не на підсторінках послуг. 4 пакети × варіанти S/M/L." },
+          { id: "4-7", text: "Розробити блок «Всі послуги» по категоріях" },
+          { id: "4-8", text: "Розробити блок «Клініка» (обладнання, простір, довіра)" },
+          { id: "4-9", text: "Розробити блок «Головна лікарка Лідія Сегедій»", hint: "Ключовий trust-builder. Фото/відео + досвід + особистий підхід." },
+          { id: "4-10", text: "Розробити Footer", hint: "Блог, Страхування, B2B, Контакти, соцмережі" },
+        ]
+      },
+      {
+        group: "Внутрішні сторінки (Пріоритет 1)",
+        items: [
+          { id: "4-11", text: "Розробити розділ «Пакети послуг»", hint: "Інфографіка, пояснення процесу, пакети з цінами. Гінеколог. чекап S/M/L, Підготовка вагітності, Свідоме батьківство, Урологічний чекап." },
+          { id: "4-12", text: "Розробити сторінки: Репродуктологія → ЕКЗ (ICSI)", badge: "P1" },
+          { id: "4-13", text: "Розробити сторінки: Консультації → Гінеколог, Репродуктолог, УЗД", badge: "P1" },
+          { id: "4-14", text: "Розробити розділ «Команда» — Про нас + профілі лікарів", hint: "Про нас: місія, цінності, клініка. Лікарі — всі рівноцінно: фото + відео-візитка + спеціалізація + CTA «Записатись»." },
+          { id: "4-15", text: "Розробити форму онлайн-запису", hint: "Вибір лікаря → дата → час → підтвердження. CRM-інтеграція — не потрібна (поки). Форма → email/телефон." },
+        ]
+      },
+      {
+        group: "Внутрішні сторінки (Пріоритет 2)",
+        items: [
+          { id: "4-16", text: "Розробити решту сторінок Репродуктології, Гінекології, Ембріології", badge: "P2" },
+          { id: "4-17", text: "Розробити решту сторінок Консультацій та Лабораторії", badge: "P2" },
+          { id: "4-18", text: "Розробити сторінку «Про нас» (всередині Команди)", hint: "Місія, цінності, обладнання, простір клініки — входить у розділ Команда" },
+          { id: "4-19", text: "Розробити Блог (структура + перші статті)", badge: "P2" },
+          { id: "4-20", text: "Розробити FAQ" },
+          { id: "4-21", text: "Розробити сторінку Контакти (адреса, карта, режим роботи, 24/7)", hint: "24/7 — невідкладні ситуації. Підкреслити доступність." },
+          { id: "4-22", text: "Розробити сторінку Вакансії" },
+        ]
+      },
+      {
+        group: "Технічні вимоги",
+        items: [
+          { id: "4-23", text: "Реалізувати мультимовність: UK / EN / PL", hint: "hreflang, окремі URL, медичний переклад — підтверджено замовником" },
+          { id: "4-24", text: "SEO: метатеги, Schema.org (MedicalClinic), Open Graph, sitemap.xml" },
+          { id: "4-25", text: "Підключити аналітику (Google Analytics / Plausible)" },
+          { id: "4-26", text: "Валідація вручну: пройти всі флоу як пацієнтка", validate: true },
+        ]
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: "Multi-Agent Review",
+    subtitle: "Багатоагентне рев'ю",
+    tasks: [
+      {
+        group: "Рев'ю агентами",
+        items: [
+          { id: "5-1", text: "Агент #1: UX/UI — відповідність макетам Figma та дизайн-системі" },
+          { id: "5-2", text: "Агент #2: SEO — метатеги, Schema.org, Core Web Vitals, hreflang" },
+          { id: "5-3", text: "Агент #3: Accessibility (a11y) — WCAG 2.1, alt-теги, контраст, фокус" },
+          { id: "5-4", text: "Агент #4: Мобільна версія — всі брейкпоїнти, touch targets, форми" },
+          { id: "5-5", text: "Агент #5: Trust & conversion — чи сайт викликає довіру? CTA, відгуки, лікарі", hint: "Ключові питання: чи видно Лідію Сегедій? Чи є відео-візитки? Чи прості форми запису?" },
+          { id: "5-6", text: "Зібрати фідбек агентів та виправити критичні зауваження", validate: true },
+        ]
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: "Validation & Launch",
+    subtitle: "Фіналізація та запуск · Дедлайн 01.05.2026",
+    tasks: [
+      {
+        group: "QA",
+        items: [
+          { id: "6-1", text: "QA: перевірити всі форми, посилання, CTA, флоу запису" },
+          { id: "6-2", text: "Кросбраузерне тестування (Chrome, Safari, Firefox, Samsung Browser)" },
+          { id: "6-3", text: "Тестування на реальних iOS та Android пристроях" },
+          { id: "6-4", text: "Перевірити швидкість (Lighthouse ≥ 85 по всіх метриках)" },
+          { id: "6-5", text: "Перевірити коректність мов (UK/EN/PL) на всіх сторінках" },
+        ]
+      },
+      {
+        group: "Деплой",
+        items: [
+          { id: "6-6", text: "Налаштування домену lono.clinic та SSL-сертифікату" },
+          { id: "6-7", text: "Фінальний code review (людський погляд)", validate: true },
+          { id: "6-8", text: "Merge у main + деплой на продакшн" },
+          { id: "6-9", text: "Перевірити сайт після деплою: форми, аналітика, пошук Google" },
+          { id: "6-10", text: "Передати замовнику: доступи, документація, інструкція по блогу" },
+        ]
+      },
+      {
+        group: "Після запуску",
+        items: [
+          { id: "6-11", text: "Моніторинг перших 7 днів: помилки, форми, трафік" },
+          { id: "6-12", text: "Ретроспектива: що покращити в pipeline для наступного проекту?" },
+        ]
+      }
+    ]
+  }
+];
+
+let done = new Set(JSON.parse(localStorage.getItem('lono-clinic-done') || '[]'));
+let filter = 'all';
+
+function save() {
+  localStorage.setItem('lono-clinic-done', JSON.stringify([...done]));
+}
+
+function getAllTasks(phase) {
+  return phase.tasks.flatMap(g => g.items || []);
+}
+
+function totalTasks() {
+  return DATA.reduce((s, p) => s + getAllTasks(p).length, 0);
+}
+
+function phaseDone(phase) {
+  return getAllTasks(phase).filter(t => done.has(t.id)).length;
+}
+
+function updateProgress() {
+  const total = totalTasks();
+  const completed = done.size;
+  const pct = total ? Math.round(completed / total * 100) : 0;
+  const circ = 163.36;
+  document.getElementById('ring-progress').style.strokeDashoffset = circ - (circ * pct / 100);
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('all-done').classList.toggle('visible', completed === total);
+}
+
+function updatePhaseBar(phase) {
+  const total = getAllTasks(phase).length;
+  const comp = phaseDone(phase);
+  const el = document.querySelector(`[data-phase="${phase.id}"] .phase-bar-fill`);
+  if (el) el.style.width = (total ? comp / total * 100 : 0) + '%';
+  const meta = document.querySelector(`[data-phase="${phase.id}"] .phase-meta`);
+  if (meta) meta.textContent = `${comp}/${total}`;
+}
+
+function applyFilter() {
+  DATA.forEach(phase => {
+    const el = document.querySelector(`[data-phase="${phase.id}"]`);
+    if (!el) return;
+    if (filter === 'all') { el.classList.remove('hidden'); return; }
+    const comp = phaseDone(phase);
+    const total = getAllTasks(phase).length;
+    if (filter === 'done') el.classList.toggle('hidden', comp < total);
+    if (filter === 'todo') el.classList.toggle('hidden', comp === total);
+  });
+}
+
+function renderBadge(task) {
+  if (task.validate) return '<span class="badge badge-validate">validate</span>';
+  if (task.badge === 'P1') return '<span class="badge badge-p1">P1</span>';
+  if (task.badge === 'P2') return '<span class="badge badge-info">P2</span>';
+  return '';
+}
+
+function render() {
+  const container = document.getElementById('phases');
+  container.innerHTML = '';
+
+  DATA.forEach((phase, pi) => {
+    const div = document.createElement('div');
+    div.className = 'phase' + (pi === 0 ? ' open' : '');
+    div.dataset.phase = phase.id;
+
+    const comp = phaseDone(phase);
+    const total = getAllTasks(phase).length;
+    const barPct = total ? comp / total * 100 : 0;
+
+    const groupsHtml = phase.tasks.map(group => `
+      <div class="task-group-label">${group.group}</div>
+      ${group.items.map(task => `
+        <div class="task${done.has(task.id) ? ' done' : ''}" data-task="${task.id}">
+          <div class="checkbox">
+            <svg class="check-icon" viewBox="0 0 8 8" fill="none">
+              <polyline points="1,4 3,6 7,2" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="task-body">
+            <div class="task-text">${task.text}</div>
+            ${task.hint ? `<div class="task-hint">${task.hint}</div>` : ''}
+          </div>
+          ${renderBadge(task)}
+        </div>
+      `).join('')}
+    `).join('');
+
+    div.innerHTML = `
+      <div class="phase-header">
+        <span class="phase-num">0${phase.id}</span>
+        <div class="phase-title-wrap">
+          <div class="phase-title">${phase.title}</div>
+          <div class="phase-subtitle">${phase.subtitle}</div>
+        </div>
+        <span class="phase-meta">${comp}/${total}</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+      <div class="phase-bar"><div class="phase-bar-fill" style="width:${barPct}%"></div></div>
+      <div class="tasks">${groupsHtml}</div>
+    `;
+
+    div.querySelector('.phase-header').addEventListener('click', () => {
+      div.classList.toggle('open');
+    });
+
+    div.querySelectorAll('.task').forEach(taskEl => {
+      taskEl.addEventListener('click', () => {
+        const id = taskEl.dataset.task;
+        if (done.has(id)) done.delete(id);
+        else done.add(id);
+        taskEl.classList.toggle('done', done.has(id));
+        taskEl.querySelector('.task-text').style.textDecoration = done.has(id) ? 'line-through' : '';
+        save();
+        updateProgress();
+        updatePhaseBar(phase);
+        applyFilter();
+      });
+    });
+
+    container.appendChild(div);
+  });
+
+  updateProgress();
+  applyFilter();
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filter = btn.dataset.filter;
+    applyFilter();
+  });
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (!confirm('Скинути весь прогрес?')) return;
+  done.clear();
+  save();
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

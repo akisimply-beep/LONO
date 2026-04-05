@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Engineering Workflow</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Unbounded:wght@300;400;700&display=swap');
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --border: #222;
+    --accent: #c8ff00;
+    --accent2: #ff6b35;
+    --text: #e8e8e8;
+    --muted: #555;
+    --done: #1a2200;
+    --done-border: #3d5a00;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid noise texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,255,0,.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,255,0,.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .shell {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .title-block {}
+
+  .label-tag {
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(20px, 4vw, 32px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .progress-ring-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 80px;
+  }
+
+  .ring-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .ring-pct {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+
+  svg.ring { transform: rotate(-90deg); }
+
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+    padding: 6px 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all .15s;
+  }
+
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,255,0,.07); }
+
+  .reset-btn {
+    margin-left: auto;
+    background: none;
+    border: 1px solid #333;
+    color: #444;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+    padding: 6px 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all .15s;
+  }
+
+  .reset-btn:hover { color: var(--accent2); border-color: var(--accent2); }
+
+  /* Phase */
+  .phase {
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: opacity .2s;
+  }
+
+  .phase.hidden { display: none; }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color .15s;
+  }
+
+  .phase.open .phase-header { border-bottom-color: var(--border); }
+
+  .phase-num {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 24px;
+  }
+
+  .phase-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    flex: 1;
+  }
+
+  .phase-meta {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+
+  .phase-chevron {
+    font-size: 10px;
+    color: var(--muted);
+    transition: transform .2s;
+  }
+
+  .phase.open .phase-chevron { transform: rotate(180deg); }
+
+  .phase-bar {
+    height: 2px;
+    background: #1e1e1e;
+    margin: 0 18px;
+    overflow: hidden;
+  }
+
+  .phase.open .phase-bar { display: none; }
+
+  .phase-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width .4s ease;
+  }
+
+  /* Tasks */
+  .tasks {
+    display: none;
+    padding: 8px 0;
+  }
+
+  .phase.open .tasks { display: block; }
+
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: background .1s;
+    border-left: 2px solid transparent;
+  }
+
+  .task:hover { background: rgba(255,255,255,.03); }
+
+  .task.done {
+    background: var(--done);
+    border-left-color: var(--done-border);
+  }
+
+  .task.done .task-text { color: var(--muted); text-decoration: line-through; }
+
+  .checkbox {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--muted);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s;
+  }
+
+  .task.done .checkbox {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .check-icon {
+    width: 8px;
+    height: 8px;
+    display: none;
+  }
+
+  .task.done .check-icon { display: block; }
+
+  .task-body { flex: 1; }
+
+  .task-text {
+    font-size: 12px;
+    line-height: 1.5;
+    transition: color .15s;
+  }
+
+  .task-hint {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: .03em;
+  }
+
+  /* Validate badge */
+  .validate-badge {
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border: 1px solid var(--accent2);
+    color: var(--accent2);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* All done state */
+  .all-done {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+    border: 1px solid var(--done-border);
+    background: var(--done);
+    margin-top: 16px;
+  }
+
+  .all-done.visible { display: block; }
+
+  .all-done-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 20px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .all-done-sub {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .1em;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #333; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="header">
+    <div class="title-block">
+      <div class="label-tag">// Agentic Engineering</div>
+      <h1>Workflow<br><span>Checklist</span></h1>
+    </div>
+    <div class="progress-ring-wrap">
+      <svg class="ring" width="64" height="64" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="26" fill="none" stroke="#1e1e1e" stroke-width="4"/>
+        <circle id="ring-progress" cx="32" cy="32" r="26" fill="none"
+          stroke="#c8ff00" stroke-width="4"
+          stroke-dasharray="163.36"
+          stroke-dashoffset="163.36"
+          stroke-linecap="square"
+          style="transition: stroke-dashoffset .4s ease"/>
+      </svg>
+      <div class="ring-pct" id="pct-label">0%</div>
+      <div class="ring-label">прогрес</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="filter-btn active" data-filter="all">Всі</button>
+    <button class="filter-btn" data-filter="todo">Очікують</button>
+    <button class="filter-btn" data-filter="done">Виконані</button>
+    <button class="reset-btn" id="reset-btn">↺ Скинути</button>
+  </div>
+
+  <div id="phases"></div>
+  <div class="all-done" id="all-done">
+    <div class="all-done-title">Pipeline завершено ✓</div>
+    <div class="all-done-sub">Усі кроки виконано — можна шипити</div>
+  </div>
+
+</div>
+
+<script>
+const DATA = [
+  {
+    id: 1,
+    title: "Product Analysis",
+    subtitle: "Аналіз та вимоги",
+    tasks: [
+      { id: "1-1", text: "Сформулювати бізнес-гіпотезу фічі або продукту", hint: "1 речення: «Ми будуємо X, щоб Y досягли Z»" },
+      { id: "1-2", text: "Провести аналіз конкурентів через AI", hint: "Ринок, аналоги, слабкі місця" },
+      { id: "1-3", text: "Скласти PRD (Product Requirement Document)", hint: "Мета, юзери, сценарії, обмеження" },
+      { id: "1-4", text: "Провести валідацію PRD", hint: "Чи все зрозуміло? Чи немає протиріч?", validate: true },
+    ]
+  },
+  {
+    id: 2,
+    title: "Business Analysis",
+    subtitle: "Деталізація та планування",
+    tasks: [
+      { id: "2-1", text: "Розбити PRD на Епіки", hint: "Кожен Епік = велика функціональна область" },
+      { id: "2-2", text: "Розбити Епіки на Stories / завдання", hint: "Story = атомарний результат для користувача" },
+      { id: "2-3", text: "Зберегти документацію в Obsidian / .md файлах", hint: "Один файл = одна Story" },
+      { id: "2-4", text: "Перевірити покриття вимог Stories", hint: "Кожна вимога з PRD має Story?", validate: true },
+    ]
+  },
+  {
+    id: 3,
+    title: "UI/UX Design",
+    subtitle: "Проектування інтерфейсу",
+    tasks: [
+      { id: "3-1", text: "Підключити AI до Figma (Claude MCP або аналог)" },
+      { id: "3-2", text: "Генерувати mobile-first макети для кожної Stories" },
+      { id: "3-3", text: "Генерувати desktop-варіанти" },
+      { id: "3-4", text: "Зробити ревізію дизайну: концепт, відступи, типографіка", validate: true },
+      { id: "3-5", text: "Узгодити дизайн із дизайн-системою проєкту" },
+    ]
+  },
+  {
+    id: 4,
+    title: "Implementation",
+    subtitle: "Ізольована розробка",
+    tasks: [
+      { id: "4-1", text: "Створити ізольовану гілку (feature branch)" },
+      { id: "4-2", text: "Дати AI контекст: документація + поточний код" },
+      { id: "4-3", text: "AI пише бекенд (API, логіка, БД)" },
+      { id: "4-4", text: "AI пише фронтенд (компоненти, стани)" },
+      { id: "4-5", text: "AI пише юніт та інтеграційні тести" },
+      { id: "4-6", text: "Валідація результату вручну", hint: "Запустити — подивитися — зафіксувати розбіжності", validate: true },
+    ]
+  },
+  {
+    id: 5,
+    title: "Multi-Agent Review",
+    subtitle: "Багатоагентне рев'ю",
+    tasks: [
+      { id: "5-1", text: "Агент #1: Пошук багів та edge cases" },
+      { id: "5-2", text: "Агент #2: Відповідність бізнес-вимогам (PRD / Stories)" },
+      { id: "5-3", text: "Агент #3: Покриття тестами (coverage)" },
+      { id: "5-4", text: "Агент #4: Відповідність документації в Obsidian" },
+      { id: "5-5", text: "Зібрати фідбек агентів, виправити критичне", validate: true },
+    ]
+  },
+  {
+    id: 6,
+    title: "Validation & Ship",
+    subtitle: "Фіналізація та деплой",
+    tasks: [
+      { id: "6-1", text: "QA: перевірити модалки, флоу, зв'язок фронт/бек" },
+      { id: "6-2", text: "Перевірити відповідність дизайн-системі" },
+      { id: "6-3", text: "Оновити документацію / README / Obsidian" },
+      { id: "6-4", text: "Code review (фінальний людський погляд)", validate: true },
+      { id: "6-5", text: "Merge у main + деплой" },
+      { id: "6-6", text: "Ретроспектива: що можна покращити в pipeline?" },
+    ]
+  }
+];
+
+// State
+let done = new Set(JSON.parse(localStorage.getItem('ae-done') || '[]'));
+let filter = 'all';
+
+function save() {
+  localStorage.setItem('ae-done', JSON.stringify([...done]));
+}
+
+function totalTasks() {
+  return DATA.reduce((s, p) => s + p.tasks.length, 0);
+}
+
+function phaseDone(phase) {
+  return phase.tasks.filter(t => done.has(t.id)).length;
+}
+
+function updateProgress() {
+  const total = totalTasks();
+  const completed = done.size;
+  const pct = total ? Math.round(completed / total * 100) : 0;
+  const circ = 163.36;
+  document.getElementById('ring-progress').style.strokeDashoffset = circ - (circ * pct / 100);
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('all-done').classList.toggle('visible', completed === total);
+}
+
+function updatePhaseBar(phase) {
+  const total = phase.tasks.length;
+  const comp = phaseDone(phase);
+  const el = document.querySelector(`[data-phase="${phase.id}"] .phase-bar-fill`);
+  if (el) el.style.width = (total ? comp / total * 100 : 0) + '%';
+  const meta = document.querySelector(`[data-phase="${phase.id}"] .phase-meta`);
+  if (meta) meta.textContent = `${comp}/${total}`;
+}
+
+function applyFilter() {
+  DATA.forEach(phase => {
+    const el = document.querySelector(`[data-phase="${phase.id}"]`);
+    if (!el) return;
+    if (filter === 'all') { el.classList.remove('hidden'); return; }
+    const comp = phaseDone(phase);
+    const total = phase.tasks.length;
+    if (filter === 'done') el.classList.toggle('hidden', comp < total);
+    if (filter === 'todo') el.classList.toggle('hidden', comp === total);
+  });
+}
+
+function render() {
+  const container = document.getElementById('phases');
+  container.innerHTML = '';
+
+  DATA.forEach((phase, pi) => {
+    const div = document.createElement('div');
+    div.className = 'phase' + (pi === 0 ? ' open' : '');
+    div.dataset.phase = phase.id;
+
+    const comp = phaseDone(phase);
+    const total = phase.tasks.length;
+    const barPct = total ? comp / total * 100 : 0;
+
+    div.innerHTML = `
+      <div class="phase-header">
+        <span class="phase-num">0${phase.id}</span>
+        <span class="phase-title">${phase.title}</span>
+        <span class="phase-meta">${comp}/${total}</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+      <div class="phase-bar"><div class="phase-bar-fill" style="width:${barPct}%"></div></div>
+      <div class="tasks">
+        ${phase.tasks.map(task => `
+          <div class="task${done.has(task.id) ? ' done' : ''}" data-task="${task.id}">
+            <div class="checkbox">
+              <svg class="check-icon" viewBox="0 0 8 8" fill="none">
+                <polyline points="1,4 3,6 7,2" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="task-body">
+              <div class="task-text">${task.text}</div>
+              ${task.hint ? `<div class="task-hint">${task.hint}</div>` : ''}
+            </div>
+            ${task.validate ? '<span class="validate-badge">validate</span>' : ''}
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    // Phase toggle
+    div.querySelector('.phase-header').addEventListener('click', () => {
+      div.classList.toggle('open');
+    });
+
+    // Task toggle
+    div.querySelectorAll('.task').forEach(taskEl => {
+      taskEl.addEventListener('click', () => {
+        const id = taskEl.dataset.task;
+        if (done.has(id)) done.delete(id);
+        else done.add(id);
+        taskEl.classList.toggle('done', done.has(id));
+        taskEl.querySelector('.task-text').style.textDecoration = done.has(id) ? 'line-through' : '';
+        save();
+        updateProgress();
+        updatePhaseBar(phase);
+        applyFilter();
+      });
+    });
+
+    container.appendChild(div);
+  });
+
+  updateProgress();
+  applyFilter();
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filter = btn.dataset.filter;
+    applyFilter();
+  });
+});
+
+// Reset
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (!confirm('Скинути весь прогрес?')) return;
+  done.clear();
+  save();
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
