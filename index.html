@@ -169,6 +169,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: var(--space-12);
       padding: 0 112px;
       background: rgba(253, 248, 241, 0.85);
       backdrop-filter: blur(20px);
@@ -181,46 +182,160 @@
       box-shadow: 0 1px 20px rgba(0, 0, 0, 0.06);
     }
 
+    .navbar-logo {
+      flex-shrink: 0;
+    }
+
     .navbar-logo img {
       height: 32px;
       display: block;
     }
 
-    /* Pill-shaped navigation container matching Figma */
+    /* Pill-shaped navigation container */
     .navbar-nav {
       display: flex;
-      gap: var(--space-16);
+      gap: 0;
       align-items: center;
       padding: var(--space-4);
       background: var(--fg-surface);
       border-radius: var(--radius-pill);
       list-style: none;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    .navbar-nav li {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+
+    /* Hidden by JS when collapsing */
+    .navbar-nav li.nav-hidden {
+      display: none;
     }
 
     .navbar-nav a {
       padding: var(--space-8) var(--space-16);
       font-size: 14px;
       font-weight: 500;
+      line-height: 20px;
       letter-spacing: 0.14px;
       color: var(--fg-solid);
       border-radius: var(--radius-pill);
       transition: color 0.3s ease, background 0.3s ease;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      height: 100%;
     }
 
-    .navbar-nav a:hover {
-      background: var(--fg-hover-bg);
+    .navbar-nav a:hover,
+    .navbar-nav a.active {
+      background: var(--fg-surface);
+      color: var(--color-gold-400);
+    }
+
+    /* "Більше" dropdown */
+    .navbar-nav .nav-more {
+      position: relative;
+      display: none;
+      align-items: center;
+      height: 100%;
+    }
+
+    .navbar-nav .nav-more.nav-visible {
+      display: flex;
+    }
+
+    .nav-more-btn {
+      padding: var(--space-8) var(--space-16);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0.14px;
+      color: var(--fg-solid);
+      border-radius: var(--radius-pill);
+      transition: color 0.3s ease, background 0.3s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      cursor: pointer;
+      height: 100%;
+    }
+
+    .nav-more-btn:hover {
+      background: var(--fg-surface);
+      color: var(--color-gold-400);
+    }
+
+    .nav-more-btn img {
+      width: 20px;
+      height: 20px;
+      opacity: 0.65;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-more.open .nav-more-btn img {
+      transform: rotate(180deg);
+    }
+
+    .nav-more-dropdown {
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-page);
+      border-radius: var(--radius-md);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      padding: var(--space-8);
+      min-width: 180px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+      transform: translateX(-50%) translateY(-8px);
+      z-index: 10;
+    }
+
+    .nav-more.open .nav-more-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .nav-more-dropdown a {
+      display: block;
+      padding: var(--space-12) var(--space-16);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg-solid);
+      border-radius: var(--radius-sm);
+      transition: background 0.2s ease, color 0.2s ease;
+      height: auto;
+    }
+
+    .nav-more-dropdown a:hover {
+      background: var(--fg-surface);
+      color: var(--color-gold-400);
+    }
+
+    /* Spacer fills available space for search */
+    .navbar-spacer {
+      flex: 1;
+      min-width: 0;
     }
 
     .navbar-actions {
       display: flex;
       align-items: center;
       gap: var(--space-12);
+      flex-shrink: 0;
     }
 
     .nav-icon-btn {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -228,22 +343,83 @@
       background: var(--fg-surface);
       padding: var(--space-4);
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, filter 0.3s;
+      flex-shrink: 0;
     }
 
     .nav-icon-btn:hover {
       background: var(--fg-hover-bg);
     }
 
+    .nav-icon-btn:hover img {
+      filter: brightness(0) saturate(100%) invert(55%) sepia(30%) saturate(600%) hue-rotate(5deg) brightness(90%);
+    }
+
     .nav-icon-btn img {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
+      transition: filter 0.3s;
+    }
+
+    /* Expandable search input */
+    .nav-search-wrapper {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-width: 48px;
+    }
+
+    .nav-search-input {
+      width: 0;
+      height: 48px;
+      padding: 0;
+      border: 1.5px solid transparent;
+      border-radius: var(--radius-full);
+      background: var(--fg-hover-bg);
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0.16px;
+      color: var(--fg-solid);
+      outline: none;
+      opacity: 0;
+      overflow: hidden;
+      flex: 0;
+      transition: flex 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  padding 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.25s ease,
+                  border-color 0.3s ease;
+    }
+
+    .nav-search-input::placeholder {
+      color: var(--fg-secondary);
+    }
+
+    .nav-search-wrapper.open .nav-search-input {
+      flex: 1;
+      width: auto;
+      min-width: 120px;
+      padding: var(--space-16);
+      padding-right: 52px;
+      opacity: 1;
+      border-color: #d4a553;
+    }
+
+    .nav-search-wrapper .nav-icon-btn {
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav-search-wrapper.open .nav-icon-btn {
+      margin-left: -48px;
     }
 
     .nav-lang-btn {
       display: flex;
       align-items: center;
       gap: var(--space-4);
+      height: 48px;
       padding: var(--space-8) var(--space-16);
       font-size: 14px;
       font-weight: 500;
@@ -251,16 +427,33 @@
       background: var(--fg-surface);
       border-radius: var(--radius-pill);
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, color 0.3s;
+      flex-shrink: 0;
     }
 
     .nav-lang-btn:hover {
       background: var(--fg-hover-bg);
+      color: var(--color-gold-400);
+    }
+
+    .nav-lang-btn:hover img {
+      filter: brightness(0) saturate(100%) invert(55%) sepia(30%) saturate(600%) hue-rotate(5deg) brightness(90%);
+    }
+
+    .nav-lang-btn.open {
+      background: var(--fg-hover-bg);
+      color: var(--color-gold-400);
+    }
+
+    .nav-lang-btn.open img {
+      transform: rotate(180deg);
+      filter: brightness(0) saturate(100%) invert(55%) sepia(30%) saturate(600%) hue-rotate(5deg) brightness(90%);
     }
 
     .nav-lang-btn img {
       width: 16px;
       height: 16px;
+      transition: transform 0.3s ease, filter 0.3s ease;
     }
 
     .btn {
@@ -298,6 +491,7 @@
 
     .btn-ghost:hover {
       background: var(--fg-hover-bg);
+      color: var(--color-gold-400);
     }
 
     .btn-gold {
@@ -309,6 +503,24 @@
       background: var(--color-gold-400);
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(185, 145, 94, 0.3);
+    }
+
+    /* CTA text variants — toggled by JS */
+    .nav-cta {
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    .nav-cta-short {
+      display: none;
+    }
+
+    .nav-cta.compact .nav-cta-full {
+      display: none;
+    }
+
+    .nav-cta.compact .nav-cta-short {
+      display: inline;
     }
 
     .hamburger {
@@ -447,6 +659,7 @@
 
     /* ===== Featured Services (Carousel) ===== */
     .featured-services {
+      position: relative;
       padding: var(--space-48) 0 var(--space-32);
       padding-left: 112px;
       background: linear-gradient(rgba(245, 241, 234, 0.2) 0%, rgb(245, 241, 234) 28%, rgb(245, 241, 234) 69%, rgba(245, 241, 234, 0.2) 100%);
@@ -460,100 +673,120 @@
       padding-right: 112px;
     }
 
-    .carousel-nav {
+    /* Nav buttons — fixed to grid edge, outside scroll container */
+    .featured-carousel-nav {
       display: flex;
       gap: var(--space-24);
       align-items: center;
+      /* Align under 3rd card: padding-left = section padding + 2 cards + 2 gaps */
+      padding-left: calc(112px + 384px + 32px + 384px + 32px);
+      margin-top: 0;
+      position: relative;
+      z-index: 2;
     }
 
+    /* Carousel nav buttons — per Figma: 48px, round, padding 4px + 8px + 24px icon */
     .carousel-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      border-radius: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--fg-surface);
-      border: 1.5px solid var(--fg-hover-bg);
-      color: var(--fg-secondary);
-      font-size: 20px;
+      padding: 4px;
+      background: rgba(30, 29, 27, 0.04);
+      border: 1.5px solid rgba(30, 29, 27, 0.08);
       transition: all 0.3s ease;
       cursor: pointer;
     }
 
     .carousel-btn:hover {
-      background: var(--fg-hover-bg);
-      color: var(--fg-solid);
+      background: rgba(30, 29, 27, 0.08);
       transform: scale(1.05);
     }
 
     .carousel-btn.next {
-      background: var(--color-gold-300);
-      border-color: var(--color-rose-200);
-      color: white;
+      background: #b9915e;
+      border-color: #ffd3d3;
     }
 
     .carousel-btn.next:hover {
-      background: var(--color-gold-400);
+      background: #a57e4b;
       transform: scale(1.05);
     }
 
+    .carousel-btn-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 48px;
+    }
+
+    .carousel-btn-icon svg {
+      width: 10px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .carousel-btn svg path {
+      stroke: rgba(30, 29, 27, 0.65);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .carousel-btn.next svg path {
+      stroke: white;
+    }
+
+    /* Viewport — clips horizontally only, shadows extend vertically */
+    .featured-cards-viewport {
+      overflow-x: clip;
+      overflow-y: visible;
+      position: relative;
+    }
+
+    /* Cards track — moved via JS transform, no overflow clipping */
     .featured-cards {
       display: flex;
       gap: var(--space-32);
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
       padding-right: 112px;
-      scroll-behavior: smooth;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform;
+      align-items: flex-start;
     }
 
-    .featured-cards::-webkit-scrollbar { display: none; }
-
+    /* Card outer — border, radius, clips oversized image */
     .featured-card {
       flex: 0 0 384px;
       height: 564px;
-      border-radius: var(--radius-lg);
-      border: 2px solid var(--color-rose-200);
-      overflow: hidden;
       position: relative;
-      scroll-snap-align: start;
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                  box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* First card is taller — 600px matching Figma */
-    .featured-card:first-child {
-      height: 600px;
-    }
-
-    /* Third card wrapper: card + nav below */
-    .featured-card-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-24);
-      flex: 0 0 384px;
-    }
-
-    .featured-card-wrapper .featured-card {
-      flex: none;
-      height: 528px;
-    }
-
-    .featured-card-wrapper .carousel-nav-inline {
-      display: flex;
-      gap: var(--space-24);
-      align-items: center;
+      border-radius: 24px;
+      border: 1px solid #ffd3d3;
+      overflow: clip;
+      transition: height 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  filter 0.5s ease;
     }
 
     .featured-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(24, 35, 80, 0.15);
+      filter: drop-shadow(0 40px 50px rgba(185, 145, 94, 0.35))
+             drop-shadow(0 20px 30px rgba(255, 180, 150, 0.2));
     }
 
+    /* Image layer — BIGGER than card (424×604), centered */
     .featured-card-bg {
       position: absolute;
-      inset: 0;
+      width: 424px;
+      height: 604px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       z-index: 0;
     }
 
@@ -568,35 +801,53 @@
       transform: scale(1.05);
     }
 
+    /* Progressive blur overlay (0 top → 13px bottom) */
+    .featured-card-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      backdrop-filter: blur(13px);
+      -webkit-backdrop-filter: blur(13px);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 65%, black 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, transparent 65%, black 100%);
+      pointer-events: none;
+    }
+
+    /* Radial gradient overlay on image layer */
     .featured-card-bg::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at bottom center, rgba(24, 35, 80, 1) 0%, rgba(139, 145, 167, 0.5) 50%, transparent 100%);
+      z-index: 2;
+      background: radial-gradient(595px 293px at 50% 100%,
+        rgba(8, 17, 54, 1) 8.65%,
+        rgba(24, 35, 80, 0) 100%
+      );
     }
 
+    /* Content layer — fills card, no blur */
     .featured-card-inner {
       position: relative;
       z-index: 1;
+      width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
+      align-items: flex-end;
       justify-content: space-between;
-      padding: var(--space-24);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      background: var(--white-border);
-      border-radius: var(--radius-lg);
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.08);
     }
 
     .featured-card-tag {
-      align-self: flex-end;
-      padding: var(--space-12) var(--space-24);
-      border-radius: var(--radius-full);
-      background: var(--color-gold-300);
-      border: 1.5px solid var(--color-rose-200);
+      padding: 12px 24px;
+      border-radius: 96px;
+      background: #b9915e;
+      border: 1.5px solid #ffd3d3;
       font-size: 14px;
       font-weight: 500;
+      line-height: 20px;
       color: white;
       letter-spacing: 0.14px;
       transition: all 0.3s ease;
@@ -607,15 +858,11 @@
       transform: scale(1.05);
     }
 
-    /* Card 4 has gradient tag */
-    .featured-card-tag.gradient {
-      background: linear-gradient(165deg, rgba(247, 199, 199, 0.51) 11%, rgba(212, 165, 83, 0.51) 81%);
-    }
-
     .featured-card-info {
       display: flex;
       flex-direction: column;
-      gap: var(--space-12);
+      gap: 12px;
+      align-self: stretch;
     }
 
     .featured-card-title {
@@ -623,15 +870,15 @@
       font-weight: 600;
       line-height: 40px;
       letter-spacing: -0.08px;
-      color: var(--white-solid);
+      color: white;
     }
 
     .featured-card-desc {
       font-size: 16px;
-      font-weight: 500;
+      font-weight: 400;
       line-height: 24px;
       letter-spacing: 0.16px;
-      color: var(--white-secondary);
+      color: rgba(255, 255, 255, 0.65);
     }
 
     /* ===== Packages Section ===== */
@@ -1377,6 +1624,9 @@
     @media (max-width: 768px) {
       .navbar { padding: 0 var(--space-16); }
       .navbar-nav { display: none; }
+      .navbar-spacer { display: none; }
+      .nav-search-wrapper { flex: 0; min-width: auto; }
+      .nav-search-input { display: none; }
       .nav-lang-btn { display: none; }
       .hamburger { display: flex; }
       .navbar-actions .btn { display: none; }
@@ -1402,11 +1652,8 @@
       .featured-cards { padding-right: var(--space-16); gap: var(--space-16); }
       .featured-card {
         flex: 0 0 300px;
-        height: 460px;
       }
-      .featured-card:first-child { height: 460px; }
-      .featured-card-wrapper { flex: 0 0 300px; }
-      .featured-card-wrapper .featured-card { height: 400px; }
+      .featured-carousel-nav { padding-left: calc(var(--space-16) + 300px + 16px + 300px + 16px); }
 
       .section-title, .contacts-title {
         font-size: 28px;
@@ -1489,15 +1736,11 @@
         line-height: 32px;
       }
 
-      .carousel-nav { display: none; }
-      .featured-card-wrapper .carousel-nav-inline { display: none; }
+      .featured-carousel-nav { display: none; }
     }
 
     @media (max-width: 420px) {
-      .featured-card { flex: 0 0 280px; height: 420px; }
-      .featured-card:first-child { height: 420px; }
-      .featured-card-wrapper { flex: 0 0 280px; }
-      .featured-card-wrapper .featured-card { height: 380px; }
+      .featured-card { flex: 0 0 280px; }
       .footer-columns { flex-direction: column; }
       .footer-col { width: 100%; }
       .featured-card-title { font-size: 24px; line-height: 32px; }
@@ -1509,16 +1752,23 @@
   <!-- ===== NAVBAR ===== -->
   <nav class="navbar" id="navbar">
     <a href="#" class="navbar-logo"><img src="assets/icons/logo.svg" alt="LONO" height="32"></a>
-    <ul class="navbar-nav">
-      <li><a href="#packages">Пакети</a></li>
-      <li><a href="#services">Послуги</a></li>
-      <li><a href="#about">Команда</a></li>
-      <li><a href="#contacts">Контакти</a></li>
+    <ul class="navbar-nav" id="navbar-nav">
+      <li data-nav-item="packages"><a href="#packages">Пакети</a></li>
+      <li data-nav-item="services"><a href="#services">Послуги</a></li>
+      <li data-nav-item="about"><a href="#about">Команда</a></li>
+      <li data-nav-item="contacts"><a href="#contacts">Контакти</a></li>
+      <li class="nav-more" id="nav-more">
+        <span class="nav-more-btn" id="nav-more-btn">Більше <img src="assets/icons/chevron-down.svg" alt=""></span>
+        <div class="nav-more-dropdown" id="nav-more-dropdown"></div>
+      </li>
     </ul>
     <div class="navbar-actions">
-      <span class="nav-icon-btn" title="Пошук"><img src="assets/icons/search.svg" alt="Пошук"></span>
-      <span class="nav-lang-btn">UA <img src="assets/icons/chevron-down.svg" alt=""></span>
-      <a href="#contact-form" class="btn btn-ghost">Онлайн консультація</a>
+      <div class="nav-search-wrapper" id="nav-search-wrapper">
+        <input type="text" class="nav-search-input" id="nav-search-input" placeholder="Пошук">
+        <span class="nav-icon-btn" id="nav-search-btn" title="Пошук"><img src="assets/icons/search.svg" alt="Пошук"></span>
+      </div>
+      <span class="nav-lang-btn" id="nav-lang-btn">UA <img src="assets/icons/chevron-down.svg" alt=""></span>
+      <a href="#contact-form" class="btn btn-ghost nav-cta" id="nav-cta"><span class="nav-cta-full">Онлайн консультація</span><span class="nav-cta-short">Консультація</span></a>
       <span class="nav-icon-btn" title="Особистий кабінет"><img src="assets/icons/person.svg" alt="Кабінет"></span>
       <div class="hamburger" id="hamburger" aria-label="Меню" role="button" tabindex="0">
         <span></span>
@@ -1564,8 +1814,9 @@
         <p class="section-subtitle">Оберіть свій шлях</p>
       </div>
     </div>
+    <div class="featured-cards-viewport">
     <div class="featured-cards" id="featured-cards">
-      <!-- Card 1: Gynecology — taller 600px -->
+      <!-- Card 1: Gynecology -->
       <div class="featured-card animate-on-scroll">
         <div class="featured-card-bg">
           <img src="assets/images/card-gynecology.jpg" alt="Гінекологічний огляд">
@@ -1591,23 +1842,17 @@
           </div>
         </div>
       </div>
-      <!-- Card 3: Pregnancy — with navigation arrows below -->
-      <div class="featured-card-wrapper">
-        <div class="featured-card animate-on-scroll">
-          <div class="featured-card-bg">
-            <img src="assets/images/card-pregnancy.jpg" alt="Підготовка до вагітності">
-          </div>
-          <div class="featured-card-inner">
-            <span class="featured-card-tag">Підготовка до вагітності</span>
-            <div class="featured-card-info">
-              <h3 class="featured-card-title">Планую вагітність</h3>
-              <p class="featured-card-desc">Обстеження і консультація лікаря перед плануванням вагітності.</p>
-            </div>
-          </div>
+      <!-- Card 3: Pregnancy -->
+      <div class="featured-card animate-on-scroll">
+        <div class="featured-card-bg">
+          <img src="assets/images/card-pregnancy.jpg" alt="Підготовка до вагітності">
         </div>
-        <div class="carousel-nav-inline">
-          <button class="carousel-btn prev" onclick="scrollCarousel(-1)" aria-label="Попередній">‹</button>
-          <button class="carousel-btn next" onclick="scrollCarousel(1)" aria-label="Наступний">›</button>
+        <div class="featured-card-inner">
+          <span class="featured-card-tag">Підготовка до вагітності</span>
+          <div class="featured-card-info">
+            <h3 class="featured-card-title">Планую вагітність</h3>
+            <p class="featured-card-desc">Обстеження і консультація лікаря перед плануванням вагітності.</p>
+          </div>
         </div>
       </div>
       <!-- Card 4: Male health -->
@@ -1616,13 +1861,49 @@
           <img src="assets/images/card-male.jpg" alt="Чоловіче здоров'я">
         </div>
         <div class="featured-card-inner">
-          <span class="featured-card-tag gradient">Підготовка до вагітності</span>
+          <span class="featured-card-tag">Підготовка до вагітності</span>
           <div class="featured-card-info">
             <h3 class="featured-card-title">Чоловіче здоров'я</h3>
             <p class="featured-card-desc">спермограма та консультація андролога</p>
           </div>
         </div>
       </div>
+      <!-- Card 5: Pregnancy care -->
+      <div class="featured-card animate-on-scroll">
+        <div class="featured-card-bg">
+          <img src="assets/images/card-pregnancy.jpg" alt="Ведення вагітності">
+        </div>
+        <div class="featured-card-inner">
+          <span class="featured-card-tag">Ведення вагітності</span>
+          <div class="featured-card-info">
+            <h3 class="featured-card-title">Ведення вагітності</h3>
+            <p class="featured-card-desc">Супровід вагітності від першого візиту до пологів.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Card 6: Urology -->
+      <div class="featured-card animate-on-scroll">
+        <div class="featured-card-bg">
+          <img src="assets/images/card-gynecology.jpg" alt="Урологічний чекап">
+        </div>
+        <div class="featured-card-inner">
+          <span class="featured-card-tag">Урологічний чекап</span>
+          <div class="featured-card-info">
+            <h3 class="featured-card-title">Урологічний чекап</h3>
+            <p class="featured-card-desc">Комплексне обстеження чоловічого здоров'я.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /.featured-cards-viewport -->
+    <!-- Nav buttons — outside scroll container, fixed to grid -->
+    <div class="featured-carousel-nav">
+      <button class="carousel-btn prev" id="carousel-prev" aria-label="Попередній">
+        <span class="carousel-btn-icon"><svg viewBox="0 0 10 16" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 1L1.5 8L8.5 15"/></svg></span>
+      </button>
+      <button class="carousel-btn next" id="carousel-next" aria-label="Наступний">
+        <span class="carousel-btn-icon"><svg viewBox="0 0 10 16" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 1L8.5 8L1.5 15"/></svg></span>
+      </button>
     </div>
   </section>
 
@@ -2241,12 +2522,83 @@
       }
     }, { passive: true });
 
-    /* ===== Carousel ===== */
-    function scrollCarousel(direction) {
-      const container = document.getElementById('featured-cards');
-      const cardWidth = 384 + 32;
-      container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
-    }
+    /* ===== Carousel (JS-driven transform, no overflow clipping) ===== */
+    (() => {
+      const track = document.getElementById('featured-cards');
+      const cards = Array.from(track.querySelectorAll('.featured-card'));
+      const prevBtn = document.getElementById('carousel-prev');
+      const nextBtn = document.getElementById('carousel-next');
+      const CARD_W = 384;
+      const GAP = 32;
+      const STEP = CARD_W + GAP;
+      let currentIndex = 0;
+
+      /* Height pattern relative to nav buttons position (index 2 = above buttons = shortest) */
+      const BASE_HEIGHTS = [600, 564, 528, 564, 600, 600]; // from original classes
+
+      const updateCarousel = () => {
+        /* Move track */
+        const offset = currentIndex * STEP;
+        track.style.transform = `translateX(-${offset}px)`;
+
+        /* Dynamic card heights — card at visible position 2 (index 2 in view) is shortest */
+        cards.forEach((card, i) => {
+          const visiblePos = i - currentIndex; // 0-based visible position
+          let height;
+          if (visiblePos === 0) height = 600;       // 1st visible — tall
+          else if (visiblePos === 1) height = 564;   // 2nd — default
+          else if (visiblePos === 2) height = 528;   // 3rd — short (above buttons)
+          else if (visiblePos === 3) height = 564;   // 4th — default
+          else height = 600;                          // others — tall
+          card.style.height = height + 'px';
+          card.style.transition = 'height 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease';
+        });
+
+        /* Disable prev at start, next at end */
+        const maxIndex = Math.max(0, cards.length - 3);
+        prevBtn.style.opacity = currentIndex === 0 ? '0.4' : '1';
+        prevBtn.style.pointerEvents = currentIndex === 0 ? 'none' : 'auto';
+        nextBtn.style.opacity = currentIndex >= maxIndex ? '0.4' : '1';
+        nextBtn.style.pointerEvents = currentIndex >= maxIndex ? 'none' : 'auto';
+      };
+
+      prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) { currentIndex--; updateCarousel(); }
+      });
+
+      nextBtn.addEventListener('click', () => {
+        const maxIndex = Math.max(0, cards.length - 3);
+        if (currentIndex < maxIndex) { currentIndex++; updateCarousel(); }
+      });
+
+      /* Touch/drag support */
+      let dragStartX = 0, dragDelta = 0, isDragging = false;
+      track.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragDelta = 0;
+        track.style.transition = 'none';
+        track.setPointerCapture(e.pointerId);
+      });
+      track.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        dragDelta = e.clientX - dragStartX;
+        const offset = currentIndex * STEP - dragDelta;
+        track.style.transform = `translateX(-${offset}px)`;
+      });
+      track.addEventListener('pointerup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        track.style.transition = '';
+        const threshold = STEP * 0.25;
+        if (dragDelta < -threshold && currentIndex < cards.length - 3) currentIndex++;
+        else if (dragDelta > threshold && currentIndex > 0) currentIndex--;
+        updateCarousel();
+      });
+
+      /* Init */
+      updateCarousel();
+    })();
 
     /* ===== Mobile menu ===== */
     const hamburger = document.getElementById('hamburger');
@@ -2263,6 +2615,175 @@
       mobileMenu.classList.remove('open');
       document.body.style.overflow = '';
     }
+
+    /* ===== Adaptive navbar — progressive collapse ===== */
+    (() => {
+      const navbar = document.getElementById('navbar');
+      const navUl = document.getElementById('navbar-nav');
+      const navItems = Array.from(navUl.querySelectorAll('li[data-nav-item]'));
+      const navMore = document.getElementById('nav-more');
+      const navMoreBtn = document.getElementById('nav-more-btn');
+      const navMoreDropdown = document.getElementById('nav-more-dropdown');
+      const navCta = document.getElementById('nav-cta');
+      const searchWrapper = document.getElementById('nav-search-wrapper');
+      const searchBtn = document.getElementById('nav-search-btn');
+      const searchInput = document.getElementById('nav-search-input');
+      const langBtn = document.getElementById('nav-lang-btn');
+
+      const MIN_GAP = 12;
+
+      /* Measure the fixed-width elements */
+      const getFixedWidth = () => {
+        const logo = navbar.querySelector('.navbar-logo');
+        const actions = navbar.querySelector('.navbar-actions');
+        const padding = parseFloat(getComputedStyle(navbar).paddingLeft) * 2;
+        /* Fixed items: logo + actions (search icon + UA + CTA + person + gaps) */
+        const logoW = logo.getBoundingClientRect().width;
+        /* Measure actions without search input */
+        const wasOpen = searchWrapper.classList.contains('open');
+        if (wasOpen) searchWrapper.classList.remove('open');
+        const actionsW = actions.getBoundingClientRect().width;
+        if (wasOpen) searchWrapper.classList.add('open');
+        return { logoW, actionsW, padding };
+      };
+
+      /* Progressive collapse logic */
+      const collapseNav = () => {
+        if (window.innerWidth <= 768) return; /* Mobile handled by CSS */
+
+        /* Reset all items to visible */
+        navItems.forEach(li => li.classList.remove('nav-hidden'));
+        navMore.classList.remove('nav-visible');
+        navCta.classList.remove('compact');
+
+        const totalWidth = navbar.getBoundingClientRect().width;
+        const { logoW, actionsW, padding } = getFixedWidth();
+
+        /* Available space for nav: total - padding - logo - gap - actions - gap */
+        const available = totalWidth - padding - logoW - MIN_GAP - actionsW - MIN_GAP;
+
+        /* Measure nav pill with all items */
+        const navWidth = navUl.getBoundingClientRect().width;
+
+        if (navWidth <= available) return; /* Everything fits */
+
+        /* Step 1: Shorten CTA text */
+        navCta.classList.add('compact');
+
+        /* Recalculate actions width after CTA compact */
+        const actionsW2 = navbar.querySelector('.navbar-actions').getBoundingClientRect().width;
+        const available2 = totalWidth - padding - logoW - MIN_GAP - actionsW2 - MIN_GAP;
+
+        if (navUl.getBoundingClientRect().width <= available2) return;
+
+        /* Step 2: Progressively hide nav items from the end, keep min 1 + "Більше" */
+        /* Show "Більше" first */
+        navMore.classList.add('nav-visible');
+
+        /* Build dropdown content from hidden items */
+        const updateDropdown = () => {
+          navMoreDropdown.innerHTML = '';
+          navItems.forEach(li => {
+            if (li.classList.contains('nav-hidden')) {
+              const link = li.querySelector('a');
+              const a = document.createElement('a');
+              a.href = link.href;
+              a.textContent = link.textContent;
+              a.addEventListener('click', () => navMore.classList.remove('open'));
+              navMoreDropdown.appendChild(a);
+            }
+          });
+        };
+
+        /* Hide items from the end until it fits */
+        for (let i = navItems.length - 1; i >= 1; i--) {
+          navItems[i].classList.add('nav-hidden');
+          updateDropdown();
+
+          const currentAvailable = totalWidth - padding - logoW - MIN_GAP -
+            navbar.querySelector('.navbar-actions').getBoundingClientRect().width - MIN_GAP;
+
+          if (navUl.getBoundingClientRect().width <= currentAvailable) return;
+        }
+      };
+
+      /* Run on resize */
+      const ro = new ResizeObserver(() => {
+        requestAnimationFrame(collapseNav);
+      });
+      ro.observe(navbar);
+      collapseNav();
+
+      /* "Більше" dropdown toggle */
+      navMoreBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navMore.classList.toggle('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!navMore.contains(e.target)) navMore.classList.remove('open');
+      });
+
+      /* Expandable search */
+      searchBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (searchWrapper.classList.contains('open')) {
+          searchWrapper.classList.remove('open');
+          searchInput.blur();
+        } else {
+          searchWrapper.classList.add('open');
+          setTimeout(() => searchInput.focus(), 350);
+        }
+        /* Re-collapse after search state change */
+        setTimeout(collapseNav, 400);
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!searchWrapper.contains(e.target)) {
+          const wasOpen = searchWrapper.classList.contains('open');
+          searchWrapper.classList.remove('open');
+          if (wasOpen) setTimeout(collapseNav, 400);
+        }
+      });
+
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          searchWrapper.classList.remove('open');
+          searchInput.blur();
+          setTimeout(collapseNav, 400);
+        }
+      });
+
+      /* UA language toggle */
+      langBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langBtn.classList.toggle('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!langBtn.contains(e.target)) langBtn.classList.remove('open');
+      });
+
+      /* Active nav item on scroll */
+      const sections = document.querySelectorAll('section[id]');
+
+      const updateActiveNav = () => {
+        const scrollPos = window.scrollY + 120;
+        let currentSection = '';
+        sections.forEach(section => {
+          if (section.offsetTop <= scrollPos) currentSection = section.id;
+        });
+        navUl.querySelectorAll('a[href^="#"]').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + currentSection) {
+            link.classList.add('active');
+          }
+        });
+      };
+
+      window.addEventListener('scroll', updateActiveNav, { passive: true });
+      updateActiveNav();
+    })();
 
     /* ===== Package tabs with real content switching ===== */
     const packageTabs = document.querySelectorAll('.packages-tab');
@@ -2322,36 +2843,7 @@
       });
     });
 
-    /* ===== Touch swipe for carousel ===== */
-    const carousel = document.getElementById('featured-cards');
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    carousel.addEventListener('mousedown', (e) => {
-      isDown = true;
-      startX = e.pageX - carousel.offsetLeft;
-      scrollLeft = carousel.scrollLeft;
-      carousel.style.cursor = 'grabbing';
-    });
-
-    carousel.addEventListener('mouseleave', () => {
-      isDown = false;
-      carousel.style.cursor = '';
-    });
-
-    carousel.addEventListener('mouseup', () => {
-      isDown = false;
-      carousel.style.cursor = '';
-    });
-
-    carousel.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - carousel.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      carousel.scrollLeft = scrollLeft - walk;
-    });
+    /* Touch swipe now handled inside carousel IIFE above */
   </script>
 </body>
 </html>
