@@ -79,6 +79,7 @@
       --space-24: 24px;
       --space-32: 32px;
       --space-48: 48px;
+      --space-56: 56px;
       --space-64: 64px;
       --space-80: 80px;
 
@@ -141,16 +142,6 @@
       to { opacity: 1; }
     }
 
-    @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-40px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes scaleIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
     .animate-on-scroll {
       opacity: 0;
       transform: translateY(30px);
@@ -178,11 +169,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 var(--space-32);
+      padding: 0 112px;
       background: rgba(253, 248, 241, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--fg-border);
       transition: background 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -191,16 +181,19 @@
       box-shadow: 0 1px 20px rgba(0, 0, 0, 0.06);
     }
 
-    .navbar-logo {
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 4px;
-      color: var(--fg-solid);
+    .navbar-logo img {
+      height: 32px;
+      display: block;
     }
 
+    /* Pill-shaped navigation container matching Figma */
     .navbar-nav {
       display: flex;
-      gap: var(--space-8);
+      gap: var(--space-16);
+      align-items: center;
+      padding: var(--space-4);
+      background: var(--fg-surface);
+      border-radius: var(--radius-pill);
       list-style: none;
     }
 
@@ -209,31 +202,66 @@
       font-size: 14px;
       font-weight: 500;
       letter-spacing: 0.14px;
-      color: var(--fg-secondary);
+      color: var(--fg-solid);
       border-radius: var(--radius-pill);
       transition: color 0.3s ease, background 0.3s ease;
+      white-space: nowrap;
     }
 
     .navbar-nav a:hover {
-      color: var(--fg-solid);
       background: var(--fg-hover-bg);
     }
 
     .navbar-actions {
       display: flex;
       align-items: center;
-      gap: var(--space-16);
+      gap: var(--space-12);
     }
 
-    .navbar-lang {
+    .nav-icon-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-pill);
+      background: var(--fg-surface);
+      padding: var(--space-4);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .nav-icon-btn:hover {
+      background: var(--fg-hover-bg);
+    }
+
+    .nav-icon-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .nav-lang-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-8) var(--space-16);
       font-size: 14px;
       font-weight: 500;
-      color: var(--fg-secondary);
+      color: var(--fg-solid);
+      background: var(--fg-surface);
+      border-radius: var(--radius-pill);
       cursor: pointer;
-      transition: color 0.3s;
+      transition: background 0.3s;
     }
 
-    .navbar-lang:hover { color: var(--fg-solid); }
+    .nav-lang-btn:hover {
+      background: var(--fg-hover-bg);
+    }
+
+    .nav-lang-btn img {
+      width: 16px;
+      height: 16px;
+    }
 
     .btn {
       display: inline-flex;
@@ -247,17 +275,8 @@
       border-radius: var(--radius-pill);
       border: 1.5px solid var(--color-rose-200);
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      opacity: 0;
-      transition: opacity 0.35s ease;
+      white-space: nowrap;
+      cursor: pointer;
     }
 
     .btn-primary {
@@ -271,9 +290,14 @@
       box-shadow: 0 8px 25px rgba(24, 35, 80, 0.25);
     }
 
-    .btn-primary:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(24, 35, 80, 0.2);
+    .btn-ghost {
+      background: var(--fg-surface);
+      border-color: var(--fg-hover-bg);
+      color: var(--fg-solid);
+    }
+
+    .btn-ghost:hover {
+      background: var(--fg-hover-bg);
     }
 
     .btn-gold {
@@ -285,16 +309,6 @@
       background: var(--color-gold-400);
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(185, 145, 94, 0.3);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--fg-solid);
-      border-color: var(--fg-border);
-    }
-
-    .btn-outline:hover {
-      background: var(--fg-hover-bg);
     }
 
     .hamburger {
@@ -332,7 +346,7 @@
       position: relative;
       border-radius: var(--radius-lg);
       overflow: hidden;
-      min-height: 552px;
+      height: 552px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -355,7 +369,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(72deg, rgba(24, 35, 80, 0.6) 0%, rgba(247, 199, 199, 0.16) 100%);
+      background: linear-gradient(72deg, rgba(24, 35, 80, 0.6) 0.4%, rgba(247, 199, 199, 0.157) 100%);
     }
 
     .hero-content {
@@ -385,7 +399,7 @@
       font-weight: 500;
       line-height: 24px;
       letter-spacing: 0.16px;
-      color: var(--fg-secondary);
+      color: var(--white-secondary);
     }
 
     .hero-title {
@@ -393,14 +407,14 @@
       font-weight: 400;
       line-height: 56px;
       letter-spacing: -0.48px;
-      color: var(--fg-solid);
+      color: var(--white-solid);
     }
 
     .hero-description {
       font-size: 16px;
       font-weight: 400;
       line-height: 24px;
-      color: var(--fg-secondary);
+      color: var(--white-secondary);
     }
 
     .hero-cta {
@@ -453,8 +467,8 @@
     }
 
     .carousel-btn {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -464,6 +478,7 @@
       color: var(--fg-secondary);
       font-size: 20px;
       transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .carousel-btn:hover {
@@ -505,6 +520,30 @@
       scroll-snap-align: start;
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
                   box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* First card is taller — 600px matching Figma */
+    .featured-card:first-child {
+      height: 600px;
+    }
+
+    /* Third card wrapper: card + nav below */
+    .featured-card-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
+      flex: 0 0 384px;
+    }
+
+    .featured-card-wrapper .featured-card {
+      flex: none;
+      height: 528px;
+    }
+
+    .featured-card-wrapper .carousel-nav-inline {
+      display: flex;
+      gap: var(--space-24);
+      align-items: center;
     }
 
     .featured-card:hover {
@@ -568,6 +607,11 @@
       transform: scale(1.05);
     }
 
+    /* Card 4 has gradient tag */
+    .featured-card-tag.gradient {
+      background: linear-gradient(165deg, rgba(247, 199, 199, 0.51) 11%, rgba(212, 165, 83, 0.51) 81%);
+    }
+
     .featured-card-info {
       display: flex;
       flex-direction: column;
@@ -603,12 +647,17 @@
     }
 
     .packages-tabs {
-      display: flex;
+      display: inline-flex;
       gap: var(--space-16);
       padding: var(--space-4);
       background: var(--fg-surface);
       border: 1px solid var(--fg-subtle-bg);
       border-radius: var(--radius-pill);
+      margin-bottom: var(--space-32);
+    }
+
+    .packages-tabs-wrapper {
+      text-align: center;
     }
 
     .packages-tab {
@@ -620,10 +669,11 @@
       border-radius: var(--radius-pill);
       cursor: pointer;
       transition: all 0.3s ease;
+      white-space: nowrap;
     }
 
     .packages-tab.active {
-      background: var(--white-primary);
+      background: rgba(255, 255, 255, 0.87);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
@@ -632,9 +682,14 @@
     }
 
     .packages-grid {
-      display: grid;
+      display: none;
       grid-template-columns: repeat(3, 1fr);
       gap: var(--space-32);
+      align-items: stretch;
+    }
+
+    .packages-grid.active {
+      display: grid;
     }
 
     .package-card {
@@ -642,7 +697,6 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: var(--space-24);
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -656,7 +710,16 @@
     }
 
     .package-card.dark {
-      background: var(--color-steel-800);
+      background: #033059;
+    }
+
+    .package-card-inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-24);
+      height: 100%;
+      gap: var(--space-24);
     }
 
     .package-card.dark .package-label,
@@ -678,6 +741,12 @@
       display: flex;
       flex-direction: column;
       gap: var(--space-24);
+    }
+
+    .package-desc-container {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
     }
 
     .package-label {
@@ -740,62 +809,74 @@
       line-height: 28px;
     }
 
-    .package-cta {
-      margin-top: var(--space-24);
-    }
-
     /* ===== Services Section ===== */
     .services {
       padding: var(--space-48) 112px;
     }
 
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: var(--space-32);
+    }
+
+    .services-content-area {
+      display: flex;
+      flex-direction: column;
+    }
+
     .services-tabs {
       display: flex;
-      gap: var(--space-8);
-      margin: var(--space-32) 0;
-      flex-wrap: wrap;
+      gap: var(--space-16);
+      padding: 0 var(--space-32);
     }
 
     .services-tab {
-      padding: var(--space-8) var(--space-16);
+      padding: var(--space-12) var(--space-24);
       font-size: 14px;
       font-weight: 500;
       letter-spacing: 0.14px;
-      color: var(--fg-secondary);
-      border-radius: var(--radius-pill);
+      color: var(--fg-solid);
+      border-radius: 16px 16px 0 0;
       cursor: pointer;
-      border: 1.5px solid transparent;
       transition: all 0.3s ease;
+      white-space: nowrap;
     }
 
     .services-tab.active {
-      background: var(--color-violet-800);
-      color: var(--white-solid);
-      border-color: var(--color-rose-200);
+      background: rgba(185, 145, 94, 0.2);
+      color: #855a00;
     }
 
     .services-tab:hover:not(.active) {
       background: var(--fg-hover-bg);
-      color: var(--fg-solid);
+    }
+
+    .service-panel {
+      display: none;
+      background: rgba(185, 145, 94, 0.2);
+      border-radius: var(--radius-lg);
+      padding: var(--space-32);
+    }
+
+    .service-panel.active {
+      display: block;
     }
 
     .service-card {
       display: flex;
-      background: var(--color-beige-100);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      min-height: 300px;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .service-card:hover {
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+      gap: var(--space-24);
+      align-items: center;
     }
 
     .service-card-img {
-      flex: 0 0 45%;
-      position: relative;
+      flex: 0 0 437px;
+      height: 360px;
+      border-radius: var(--radius-sm);
       overflow: hidden;
+      border: 4px solid white;
+      position: relative;
     }
 
     .service-card-img img {
@@ -811,17 +892,16 @@
 
     .service-card-content {
       flex: 1;
-      padding: var(--space-48);
       display: flex;
       flex-direction: column;
-      gap: var(--space-24);
-      justify-content: center;
+      gap: var(--space-8);
     }
 
     .service-card-label {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 500;
-      letter-spacing: 0.14px;
+      letter-spacing: 0.16px;
+      line-height: 24px;
       color: var(--fg-secondary);
     }
 
@@ -829,70 +909,81 @@
       font-size: 32px;
       font-weight: 600;
       line-height: 40px;
-      letter-spacing: -0.25px;
+      letter-spacing: -0.08px;
     }
 
     .service-card-desc {
       font-size: 16px;
-      font-weight: 400;
+      font-weight: 500;
       line-height: 24px;
+      letter-spacing: 0.16px;
       color: var(--fg-secondary);
     }
 
-    .btn-text {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-8);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.14px;
-      color: var(--color-gold-300);
-      padding: var(--space-12) var(--space-24);
-      border-radius: var(--radius-pill);
-      border: 1.5px solid var(--color-rose-200);
-      background: transparent;
-      transition: all 0.3s ease;
-    }
-
-    .btn-text:hover {
-      background: rgba(185, 145, 94, 0.08);
-      transform: translateX(4px);
+    .service-cta {
+      padding-top: var(--space-16);
     }
 
     /* ===== About Section ===== */
     .about {
-      padding: var(--space-48) 112px;
-    }
-
-    .about-card {
-      display: flex;
-      background: var(--color-steel-800);
       border-radius: var(--radius-lg);
       overflow: hidden;
-      min-height: 460px;
+      position: relative;
+      min-height: 596px;
+    }
+
+    .about-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .about-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .about-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(247deg, transparent 18%, rgba(0, 0, 0, 0.5) 94%),
+        linear-gradient(90deg, rgba(9, 20, 47, 0.2) 0%, rgba(9, 20, 47, 0.2) 100%);
+    }
+
+    .about-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: var(--space-32);
+      align-items: center;
+      padding: var(--space-80) 112px;
+      background: rgba(49, 63, 111, 0.4);
+      border-radius: var(--radius-lg);
+      min-height: 596px;
     }
 
     .about-content {
       flex: 1;
-      padding: var(--space-64);
       display: flex;
       flex-direction: column;
-      gap: var(--space-24);
-      justify-content: center;
+      gap: var(--space-32);
+      max-width: 592px;
     }
 
-    .about-logo {
-      font-size: 24px;
-      font-weight: 500;
-      letter-spacing: 4px;
-      color: var(--white-secondary);
+    .about-text {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
     }
 
     .about-title {
-      font-size: 32px;
-      font-weight: 600;
-      line-height: 40px;
-      letter-spacing: -0.25px;
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 56px;
+      letter-spacing: -0.48px;
       color: var(--white-solid);
     }
 
@@ -900,14 +991,15 @@
       font-size: 16px;
       font-weight: 400;
       line-height: 24px;
-      color: var(--white-secondary);
-      max-width: 500px;
+      color: var(--white-primary);
     }
 
     .about-img {
-      flex: 0 0 40%;
-      position: relative;
+      flex: 0 0 592px;
+      height: 398px;
+      border-radius: var(--radius-lg);
       overflow: hidden;
+      border: 4px solid white;
     }
 
     .about-img img {
@@ -917,7 +1009,7 @@
       transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .about-card:hover .about-img img {
+    .about:hover .about-img img {
       transform: scale(1.03);
     }
 
@@ -928,9 +1020,11 @@
 
     .contact-form-card {
       display: flex;
-      gap: var(--space-64);
+      gap: var(--space-32);
       align-items: center;
-      padding: var(--space-48) var(--space-64);
+      padding: var(--space-32);
+      background: var(--bg-section);
+      border-radius: var(--radius-lg);
     }
 
     .contact-form-text {
@@ -941,46 +1035,52 @@
     }
 
     .contact-form-label {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--fg-secondary);
-    }
-
-    .contact-form-title {
-      font-size: 32px;
-      font-weight: 600;
-      line-height: 40px;
-      letter-spacing: -0.25px;
-    }
-
-    .contact-form-desc {
       font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.16px;
       line-height: 24px;
       color: var(--fg-secondary);
     }
 
+    .contact-form-title {
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 56px;
+      letter-spacing: -0.48px;
+    }
+
+    .contact-form-desc {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0.16px;
+      color: var(--fg-secondary);
+    }
+
     .contact-form-inputs {
-      flex: 0 0 380px;
+      flex: 0 0 352px;
       display: flex;
       flex-direction: column;
-      gap: var(--space-12);
+      gap: var(--space-16);
     }
 
     .form-input {
       width: 100%;
-      padding: var(--space-16) var(--space-24);
+      padding: var(--space-16);
       font-family: var(--font-family);
       font-size: 16px;
-      border: 1.5px solid var(--fg-border);
-      border-radius: var(--radius-md);
-      background: transparent;
+      font-weight: 500;
+      letter-spacing: 0.16px;
+      border: 1px solid #D4A553;
+      border-radius: var(--radius-sm);
+      background: var(--fg-hover-bg);
       color: var(--fg-solid);
       transition: all 0.3s ease;
       outline: none;
     }
 
     .form-input::placeholder {
-      color: var(--fg-hint);
+      color: var(--fg-secondary);
     }
 
     .form-input:focus {
@@ -990,57 +1090,87 @@
 
     .form-or {
       text-align: center;
-      font-size: 14px;
-      color: var(--fg-hint);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.16px;
+      color: var(--fg-secondary);
     }
 
-    /* ===== Contacts Section ===== */
-    .contacts {
-      padding: var(--space-48) 112px;
+    /* ===== Contacts + Footer combined dark section ===== */
+    .contacts-footer-wrapper {
+      padding-top: var(--space-48);
+    }
+
+    .contacts-section {
+      padding: 0 112px;
+      background: linear-gradient(to bottom, var(--bg-page) 0%, var(--color-violet-800) 100%);
+      padding-bottom: 0;
+    }
+
+    .contacts-inner {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-32);
+      padding-bottom: var(--space-56);
+    }
+
+    .contacts-title {
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 56px;
+      letter-spacing: -0.48px;
+      color: var(--fg-solid);
     }
 
     .contacts-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-48);
-      margin-top: var(--space-32);
+      display: flex;
+      gap: var(--space-12);
+      align-items: center;
     }
 
     .contacts-info {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: var(--space-24);
+      gap: var(--space-12);
     }
 
     .contact-item {
       display: flex;
-      gap: var(--space-16);
-      align-items: flex-start;
+      gap: var(--space-12);
+      align-items: center;
     }
 
     .contact-icon {
-      width: 24px;
-      height: 24px;
+      width: 48px;
+      height: 48px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--color-violet-800);
-      font-size: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50px;
+    }
+
+    .contact-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--white-primary);
     }
 
     .contact-text {
       font-size: 16px;
+      font-weight: 400;
       line-height: 24px;
-      color: var(--fg-secondary);
+      color: var(--white-solid);
     }
 
     .contacts-map {
-      border-radius: var(--radius-lg);
+      flex: 0 0 698px;
+      height: 326px;
+      border-radius: 32px;
       overflow: hidden;
-      background: var(--color-beige-100);
-      min-height: 300px;
-      position: relative;
+      opacity: 0.9;
     }
 
     .contacts-map img {
@@ -1051,104 +1181,135 @@
 
     /* ===== Footer ===== */
     .footer {
-      padding: var(--space-48) 112px;
-      border-top: 1px solid var(--fg-border);
-      margin-top: var(--space-48);
+      background: var(--color-violet-800);
+      padding: var(--space-32) 112px;
     }
 
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr 1fr;
-      gap: var(--space-48);
-      margin-bottom: var(--space-48);
+    .footer-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 40px 0;
+      border-top: 1px solid var(--white-border);
     }
 
-    .footer-logo {
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 4px;
-      margin-bottom: var(--space-16);
+    .footer-brand {
+      max-width: 319px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
     }
 
-    .footer-desc {
-      font-size: 14px;
-      line-height: 20px;
-      color: var(--fg-secondary);
+    .footer-brand img {
+      height: 32px;
+    }
+
+    .footer-brand-desc {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--white-secondary);
+    }
+
+    .footer-columns {
+      display: flex;
+      gap: var(--space-32);
+    }
+
+    .footer-col {
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+      padding: var(--space-24) 0;
     }
 
     .footer-col-title {
-      font-size: 14px;
+      font-size: 20px;
       font-weight: 600;
-      margin-bottom: var(--space-16);
-      color: var(--fg-solid);
+      line-height: 28px;
+      color: var(--white-solid);
     }
 
     .footer-links {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: var(--space-8);
     }
 
-    .footer-links a {
-      font-size: 14px;
-      color: var(--fg-secondary);
+    .footer-links li a {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--white-secondary);
       transition: color 0.3s ease;
     }
 
-    .footer-links a:hover {
-      color: var(--fg-solid);
+    .footer-links li a:hover {
+      color: var(--white-solid);
     }
 
     .footer-bottom {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: var(--space-24);
-      border-top: 1px solid var(--fg-border);
+      padding: var(--space-12) 0;
+      border-top: 1px solid var(--white-border);
     }
 
-    .footer-bottom-left {
+    .footer-langs {
       display: flex;
-      gap: var(--space-16);
+      gap: var(--space-24);
     }
 
-    .footer-bottom-left a {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--fg-hint);
+    .footer-lang {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--white-secondary);
+      cursor: pointer;
       transition: color 0.3s;
     }
 
-    .footer-bottom-left a:hover { color: var(--fg-solid); }
+    .footer-lang.active {
+      color: var(--white-solid);
+    }
 
-    .footer-bottom-right {
-      font-size: 12px;
-      color: var(--fg-hint);
+    .footer-lang:hover {
+      color: var(--white-solid);
+    }
+
+    .footer-copyright {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--white-secondary);
     }
 
     .footer-social {
       display: flex;
-      gap: var(--space-12);
+      gap: var(--space-24);
     }
 
     .social-btn {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: var(--fg-surface);
+      background: rgba(255, 255, 255, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
-      color: var(--fg-secondary);
       transition: all 0.3s ease;
     }
 
     .social-btn:hover {
-      background: var(--fg-hover-bg);
-      color: var(--fg-solid);
+      background: rgba(255, 255, 255, 0.2);
       transform: translateY(-2px);
+    }
+
+    .social-btn img {
+      width: 18px;
+      height: 18px;
     }
 
     /* ===== Mobile Menu ===== */
@@ -1186,39 +1347,43 @@
 
     /* ===== RESPONSIVE ===== */
 
-    /* Tablet: 768px */
     @media (max-width: 1200px) {
+      .navbar { padding: 0 var(--space-32); }
       .featured-services { padding-left: var(--space-32); }
       .featured-services-top { padding-right: var(--space-32); }
       .featured-cards { padding-right: var(--space-32); }
       .packages,
       .services,
-      .about,
-      .contact-form-section,
-      .contacts,
+      .contact-form-section { padding-left: var(--space-32); padding-right: var(--space-32); }
+      .contacts-section { padding-left: var(--space-32); padding-right: var(--space-32); }
       .footer { padding-left: var(--space-32); padding-right: var(--space-32); }
-      .packages-grid { grid-template-columns: 1fr 1fr; }
-      .packages-grid .package-card:last-child {
+      .about-inner { padding-left: var(--space-32); padding-right: var(--space-32); }
+      .packages-grid.active { grid-template-columns: 1fr 1fr; }
+      .packages-grid.active .package-card:last-child {
         grid-column: 1 / -1;
         max-width: 50%;
       }
-      .section-title, .hero-title {
+      .section-title, .hero-title, .about-title, .contact-form-title, .contacts-title {
         font-size: 36px;
         line-height: 44px;
       }
-      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-32); }
+      .footer-columns { gap: var(--space-16); }
+      .footer-col { width: auto; }
+      .about-img { flex: 0 0 400px; height: 340px; }
+      .contacts-map { flex: 0 0 50%; }
+      .service-card-img { flex: 0 0 360px; height: 300px; }
     }
 
-    /* Mobile: 768px */
     @media (max-width: 768px) {
+      .navbar { padding: 0 var(--space-16); }
       .navbar-nav { display: none; }
-      .navbar-lang { display: none; }
+      .nav-lang-btn { display: none; }
       .hamburger { display: flex; }
-
       .navbar-actions .btn { display: none; }
 
       .hero { padding: 88px var(--space-12) var(--space-12); }
       .hero-container {
+        height: auto;
         min-height: 460px;
         padding: var(--space-24);
       }
@@ -1239,7 +1404,11 @@
         flex: 0 0 300px;
         height: 460px;
       }
-      .section-title {
+      .featured-card:first-child { height: 460px; }
+      .featured-card-wrapper { flex: 0 0 300px; }
+      .featured-card-wrapper .featured-card { height: 400px; }
+
+      .section-title, .contacts-title {
         font-size: 28px;
         line-height: 36px;
       }
@@ -1247,39 +1416,52 @@
 
       .packages,
       .services,
-      .about,
-      .contact-form-section,
-      .contacts,
+      .contact-form-section {
+        padding-left: var(--space-16);
+        padding-right: var(--space-16);
+      }
+      .contacts-section {
+        padding-left: var(--space-16);
+        padding-right: var(--space-16);
+      }
       .footer {
         padding-left: var(--space-16);
         padding-right: var(--space-16);
       }
 
-      .packages-grid {
+      .packages-grid.active {
         grid-template-columns: 1fr;
       }
-      .packages-grid .package-card:last-child { max-width: 100%; }
-      .packages-tabs { overflow-x: auto; flex-wrap: nowrap; }
+      .packages-grid.active .package-card:last-child { max-width: 100%; }
+      .packages-tabs { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+      .packages-tabs::-webkit-scrollbar { display: none; }
 
       .service-card {
         flex-direction: column;
       }
       .service-card-img {
         flex: none;
+        width: 100%;
         height: 220px;
       }
       .service-card-content {
-        padding: var(--space-24);
+        padding: var(--space-24) 0;
       }
       .service-card-title {
         font-size: 24px;
         line-height: 32px;
       }
+      .services-tabs { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+      .services-tabs::-webkit-scrollbar { display: none; }
 
-      .about-card { flex-direction: column; }
-      .about-content { padding: var(--space-32); }
-      .about-img { flex: none; height: 280px; }
-      .about-title { font-size: 24px; line-height: 32px; }
+      .about-inner {
+        flex-direction: column;
+        padding: var(--space-32) var(--space-16);
+        min-height: auto;
+      }
+      .about-content { max-width: 100%; }
+      .about-img { flex: none; width: 100%; height: 280px; }
+      .about-title { font-size: 28px; line-height: 36px; }
 
       .contact-form-card {
         flex-direction: column;
@@ -1287,11 +1469,14 @@
         gap: var(--space-32);
       }
       .contact-form-inputs { flex: none; width: 100%; }
-      .contact-form-title { font-size: 24px; line-height: 32px; }
+      .contact-form-title { font-size: 28px; line-height: 36px; }
 
-      .contacts-grid { grid-template-columns: 1fr; }
+      .contacts-grid { flex-direction: column; gap: var(--space-32); }
+      .contacts-map { flex: none; width: 100%; height: 240px; }
 
-      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-main { flex-direction: column; gap: var(--space-32); }
+      .footer-columns { flex-wrap: wrap; gap: var(--space-24); }
+      .footer-col { width: calc(50% - 12px); }
 
       .footer-bottom {
         flex-direction: column;
@@ -1305,12 +1490,16 @@
       }
 
       .carousel-nav { display: none; }
+      .featured-card-wrapper .carousel-nav-inline { display: none; }
     }
 
-    /* Small mobile: 375px */
     @media (max-width: 420px) {
       .featured-card { flex: 0 0 280px; height: 420px; }
-      .footer-grid { grid-template-columns: 1fr; }
+      .featured-card:first-child { height: 420px; }
+      .featured-card-wrapper { flex: 0 0 280px; }
+      .featured-card-wrapper .featured-card { height: 380px; }
+      .footer-columns { flex-direction: column; }
+      .footer-col { width: 100%; }
       .featured-card-title { font-size: 24px; line-height: 32px; }
     }
   </style>
@@ -1327,10 +1516,10 @@
       <li><a href="#contacts">Контакти</a></li>
     </ul>
     <div class="navbar-actions">
-      <span class="navbar-lang" style="cursor:pointer;"><img src="assets/icons/search.svg" alt="Пошук" width="20" height="20"></span>
-      <span class="navbar-lang">UA <img src="assets/icons/chevron-down.svg" alt="" width="16" height="16" style="vertical-align:middle;"></span>
-      <a href="#contact-form" class="btn btn-primary">Онлайн консультація</a>
-      <span class="navbar-lang" title="Особистий кабінет" style="cursor:pointer;"><img src="assets/icons/person.svg" alt="Кабінет" width="20" height="20"></span>
+      <span class="nav-icon-btn" title="Пошук"><img src="assets/icons/search.svg" alt="Пошук"></span>
+      <span class="nav-lang-btn">UA <img src="assets/icons/chevron-down.svg" alt=""></span>
+      <a href="#contact-form" class="btn btn-ghost">Онлайн консультація</a>
+      <span class="nav-icon-btn" title="Особистий кабінет"><img src="assets/icons/person.svg" alt="Кабінет"></span>
       <div class="hamburger" id="hamburger" aria-label="Меню" role="button" tabindex="0">
         <span></span>
         <span></span>
@@ -1374,12 +1563,9 @@
         <h2 class="section-title">З чим ми можемо допомогти?</h2>
         <p class="section-subtitle">Оберіть свій шлях</p>
       </div>
-      <div class="carousel-nav">
-        <button class="carousel-btn prev" onclick="scrollCarousel(-1)" aria-label="Попередній">‹</button>
-        <button class="carousel-btn next" onclick="scrollCarousel(1)" aria-label="Наступний">›</button>
-      </div>
     </div>
     <div class="featured-cards" id="featured-cards">
+      <!-- Card 1: Gynecology — taller 600px -->
       <div class="featured-card animate-on-scroll">
         <div class="featured-card-bg">
           <img src="assets/images/card-gynecology.jpg" alt="Гінекологічний огляд">
@@ -1392,6 +1578,7 @@
           </div>
         </div>
       </div>
+      <!-- Card 2: Reproductive -->
       <div class="featured-card animate-on-scroll">
         <div class="featured-card-bg">
           <img src="assets/images/card-reproductive.jpg" alt="Репродуктологія">
@@ -1404,27 +1591,35 @@
           </div>
         </div>
       </div>
-      <div class="featured-card animate-on-scroll">
-        <div class="featured-card-bg">
-          <img src="assets/images/card-pregnancy.jpg" alt="Підготовка до вагітності">
-        </div>
-        <div class="featured-card-inner">
-          <span class="featured-card-tag">Підготовка до вагітності</span>
-          <div class="featured-card-info">
-            <h3 class="featured-card-title">Планую вагітність</h3>
-            <p class="featured-card-desc">Обстеження і консультація лікаря перед плануванням вагітності.</p>
+      <!-- Card 3: Pregnancy — with navigation arrows below -->
+      <div class="featured-card-wrapper">
+        <div class="featured-card animate-on-scroll">
+          <div class="featured-card-bg">
+            <img src="assets/images/card-pregnancy.jpg" alt="Підготовка до вагітності">
+          </div>
+          <div class="featured-card-inner">
+            <span class="featured-card-tag">Підготовка до вагітності</span>
+            <div class="featured-card-info">
+              <h3 class="featured-card-title">Планую вагітність</h3>
+              <p class="featured-card-desc">Обстеження і консультація лікаря перед плануванням вагітності.</p>
+            </div>
           </div>
         </div>
+        <div class="carousel-nav-inline">
+          <button class="carousel-btn prev" onclick="scrollCarousel(-1)" aria-label="Попередній">‹</button>
+          <button class="carousel-btn next" onclick="scrollCarousel(1)" aria-label="Наступний">›</button>
+        </div>
       </div>
+      <!-- Card 4: Male health -->
       <div class="featured-card animate-on-scroll">
         <div class="featured-card-bg">
           <img src="assets/images/card-male.jpg" alt="Чоловіче здоров'я">
         </div>
         <div class="featured-card-inner">
-          <span class="featured-card-tag">Чоловіче здоров'я</span>
+          <span class="featured-card-tag gradient">Підготовка до вагітності</span>
           <div class="featured-card-info">
             <h3 class="featured-card-title">Чоловіче здоров'я</h3>
-            <p class="featured-card-desc">Спермограма та консультація андролога</p>
+            <p class="featured-card-desc">спермограма та консультація андролога</p>
           </div>
         </div>
       </div>
@@ -1439,103 +1634,336 @@
         <p class="section-subtitle">Пакети — це структурований план обстеження та лікування.</p>
       </div>
     </div>
-    <div class="packages-tabs">
-      <span class="packages-tab active">Гінекологічний чекап</span>
-      <span class="packages-tab">Підготовка до вагітності</span>
-      <span class="packages-tab">Свідоме батьківство</span>
-      <span class="packages-tab">Урологічний чекап</span>
+    <div class="packages-tabs-wrapper">
+      <div class="packages-tabs" id="packages-tabs">
+        <span class="packages-tab active" data-tab="gynecology">Гінекологічний чекап</span>
+        <span class="packages-tab" data-tab="pregnancy">Підготовка до вагітності</span>
+        <span class="packages-tab" data-tab="parenthood">Свідоме батьківство</span>
+        <span class="packages-tab" data-tab="urology">Урологічний чекап</span>
+      </div>
     </div>
-    <div class="packages-grid">
+
+    <!-- Tab 1: Гінекологічний чекап -->
+    <div class="packages-grid active" id="tab-gynecology">
       <div class="package-card light animate-on-scroll">
-        <div class="package-body">
-          <div>
-            <p class="package-label">Пакет S</p>
-            <h3 class="package-name">Базовий огляд</h3>
-            <p class="package-desc">Початкове обстеження для оцінки жіночого здоров'я.</p>
+        <div class="package-card-inner">
+          <div class="package-body">
+            <div class="package-desc-container">
+              <p class="package-label">Пакет S</p>
+              <h3 class="package-name">Базовий огляд</h3>
+              <p class="package-desc">Початкове обстеження для оцінки жіночого здоров'я.</p>
+            </div>
+            <p class="package-price">від ₴ 2 800 грн</p>
+            <div class="package-details">
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Консультація гінеколога</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Мазок на флору</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">ПАП-тест</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Трансвагінальне УЗД органів малого тазу</span>
+              </div>
+            </div>
           </div>
-          <p class="package-price">від ₴ 2 800 грн</p>
-          <div class="package-details">
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">Консультація гінеколога</span>
-            </div>
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">Мазок на флору</span>
-            </div>
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">ПАП-тест</span>
-            </div>
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">Трансвагінальне УЗД органів малого тазу</span>
-            </div>
-          </div>
-        </div>
-        <div class="package-cta">
           <a href="#contact-form" class="btn btn-primary" style="width:100%;text-align:center;">Записатись</a>
         </div>
       </div>
       <div class="package-card dark animate-on-scroll">
-        <div class="package-body">
-          <div>
-            <p class="package-label">Пакет M</p>
-            <h3 class="package-name">Розширений огляд</h3>
-            <p class="package-desc">Найпопулярніший пакет для комплексної перевірки здоров'я.</p>
+        <div class="package-card-inner">
+          <div class="package-body">
+            <div class="package-desc-container">
+              <p class="package-label">Пакет M</p>
+              <h3 class="package-name">Розширений огляд</h3>
+              <p class="package-desc">Найпопулярніший пакет для комплексної перевірки здоров'я.</p>
+            </div>
+            <p class="package-price">від ₴ 6 500 грн</p>
+            <div class="package-details">
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Все з Базового +</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Розширена кольпоскопія</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">ПЛР на ВПЛ</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">УЗД молочних залоз та щитоподібної залози</span>
+              </div>
+            </div>
           </div>
-          <p class="package-price">від ₴ 2 800 грн</p>
-          <div class="package-details">
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">Все з Базового +</span>
-            </div>
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">Розширена кольпоскопія</span>
-            </div>
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">ПЛР на ВПЛ</span>
-            </div>
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">УЗД молочних залоз та щитоподібної залози</span>
-            </div>
-          </div>
-        </div>
-        <div class="package-cta">
           <a href="#contact-form" class="btn btn-gold" style="width:100%;text-align:center;">Записатись</a>
         </div>
       </div>
       <div class="package-card light animate-on-scroll">
-        <div class="package-body">
-          <div>
-            <p class="package-label">Пакет L</p>
-            <h3 class="package-name">Повний чекап</h3>
-            <p class="package-desc">Розширена діагностика з додатковими обстеженнями.</p>
+        <div class="package-card-inner">
+          <div class="package-body">
+            <div class="package-desc-container">
+              <p class="package-label">Пакет L</p>
+              <h3 class="package-name">Повний чекап</h3>
+              <p class="package-desc">Розширена діагностика з додатковими обстеженнями.</p>
+            </div>
+            <p class="package-price">від ₴ 14 500 грн</p>
+            <div class="package-details">
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Все з Розширеного +</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Гормональна панель</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Онкомаркери</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Консультація ендокринолога та УЗД</span>
+              </div>
+            </div>
           </div>
-          <p class="package-price">від ₴ 2 800 грн</p>
-          <div class="package-details">
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">Все з Розширеного +</span>
-            </div>
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">Гормональна панель</span>
-            </div>
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">Онкомаркери</span>
-            </div>
-            <div class="package-detail">
-              <span class="package-check">✓</span>
-              <span class="package-detail-text">Консультація ендокринолога та УЗД</span>
-            </div>
-          </div>
+          <a href="#contact-form" class="btn btn-primary" style="width:100%;text-align:center;">Записатись</a>
         </div>
-        <div class="package-cta">
+      </div>
+    </div>
+
+    <!-- Tab 2: Підготовка до вагітності -->
+    <div class="packages-grid" id="tab-pregnancy">
+      <div class="package-card light animate-on-scroll">
+        <div class="package-card-inner">
+          <div class="package-body">
+            <div class="package-desc-container">
+              <p class="package-label">Базовий</p>
+              <h3 class="package-name">Базова підготовка</h3>
+              <p class="package-desc">Перший крок до усвідомленого планування.</p>
+            </div>
+            <p class="package-price">від ₴ 8 500 грн</p>
+            <div class="package-details">
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Консультація репродуктолога</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">УЗД органів малого тазу</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Базові аналізи крові</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Мазок + TORCH-інфекції</span>
+              </div>
+            </div>
+          </div>
+          <a href="#contact-form" class="btn btn-primary" style="width:100%;text-align:center;">Записатись</a>
+        </div>
+      </div>
+      <div class="package-card dark animate-on-scroll">
+        <div class="package-card-inner">
+          <div class="package-body">
+            <div class="package-desc-container">
+              <p class="package-label">Розширений</p>
+              <h3 class="package-name">Повна діагностика</h3>
+              <p class="package-desc">Комплексне обстеження з генетичною консультацією.</p>
+            </div>
+            <p class="package-price">від ₴ 16 000 грн</p>
+            <div class="package-details">
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Все з Базового +</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Гормональна панель</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">ІПСШ + Коагулограма</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Консультація генетика</span>
+              </div>
+            </div>
+          </div>
+          <a href="#contact-form" class="btn btn-gold" style="width:100%;text-align:center;">Записатись</a>
+        </div>
+      </div>
+      <div class="package-card light animate-on-scroll">
+        <div class="package-card-inner">
+          <div class="package-body">
+            <div class="package-desc-container">
+              <p class="package-label">Преміум (пара)</p>
+              <h3 class="package-name">Для двох</h3>
+              <p class="package-desc">Розширена програма для пари з генетичним скринінгом.</p>
+            </div>
+            <p class="package-price">від ₴ 28 000 грн</p>
+            <div class="package-details">
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Розширений для жінки +</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Консультація уролога</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Спермограма + HLA</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Каріотип обох партнерів</span>
+              </div>
+            </div>
+          </div>
+          <a href="#contact-form" class="btn btn-primary" style="width:100%;text-align:center;">Записатись</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Свідоме батьківство -->
+    <div class="packages-grid" id="tab-parenthood">
+      <div class="package-card dark animate-on-scroll" style="grid-column: 1 / -1; max-width: 600px;">
+        <div class="package-card-inner">
+          <div class="package-body">
+            <div class="package-desc-container">
+              <p class="package-label">Повний цикл для пари</p>
+              <h3 class="package-name">Свідоме батьківство</h3>
+              <p class="package-desc">Комплексна програма підготовки до батьківства з повною діагностикою та персональним планом.</p>
+            </div>
+            <p class="package-price">від ₴ 35 000 грн</p>
+            <div class="package-details">
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Консультація репродуктолога</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Розширена діагностика обох партнерів</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Генетичний скринінг</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">УЗД + Гормональна панель</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Консультація ембріолога</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Індивідуальний план лікування</span>
+              </div>
+            </div>
+          </div>
+          <a href="#contact-form" class="btn btn-gold" style="width:100%;text-align:center;">Записатись</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 4: Урологічний чекап -->
+    <div class="packages-grid" id="tab-urology">
+      <div class="package-card light animate-on-scroll">
+        <div class="package-card-inner">
+          <div class="package-body">
+            <div class="package-desc-container">
+              <p class="package-label">Пакет S</p>
+              <h3 class="package-name">Базовий чекап</h3>
+              <p class="package-desc">Первинне обстеження чоловічого здоров'я.</p>
+            </div>
+            <p class="package-price">від ₴ 3 500 грн</p>
+            <div class="package-details">
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Консультація уролога-андролога</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Спермограма</span>
+              </div>
+            </div>
+          </div>
+          <a href="#contact-form" class="btn btn-primary" style="width:100%;text-align:center;">Записатись</a>
+        </div>
+      </div>
+      <div class="package-card dark animate-on-scroll">
+        <div class="package-card-inner">
+          <div class="package-body">
+            <div class="package-desc-container">
+              <p class="package-label">Пакет M</p>
+              <h3 class="package-name">Розширений чекап</h3>
+              <p class="package-desc">Комплексне обстеження з додатковими аналізами.</p>
+            </div>
+            <p class="package-price">від ₴ 8 000 грн</p>
+            <div class="package-details">
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Все з Базового +</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">УЗД простати</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Аналізи крові</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">ІПСШ</span>
+              </div>
+            </div>
+          </div>
+          <a href="#contact-form" class="btn btn-gold" style="width:100%;text-align:center;">Записатись</a>
+        </div>
+      </div>
+      <div class="package-card light animate-on-scroll">
+        <div class="package-card-inner">
+          <div class="package-body">
+            <div class="package-desc-container">
+              <p class="package-label">Пакет L</p>
+              <h3 class="package-name">Преміум чекап</h3>
+              <p class="package-desc">Повна діагностика з генетичним аналізом.</p>
+            </div>
+            <p class="package-price">від ₴ 16 500 грн</p>
+            <div class="package-details">
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Все з Розширеного +</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">MAR-тест</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">HBA-тест</span>
+              </div>
+              <div class="package-detail">
+                <span class="package-check">✓</span>
+                <span class="package-detail-text">Генетика сперматозоїдів</span>
+              </div>
+            </div>
+          </div>
           <a href="#contact-form" class="btn btn-primary" style="width:100%;text-align:center;">Записатись</a>
         </div>
       </div>
@@ -1544,41 +1972,123 @@
 
   <!-- ===== SERVICES ===== -->
   <section class="services" id="services">
-    <div class="section-header animate-on-scroll">
-      <h2 class="section-title">Наші послуги</h2>
-      <p class="section-subtitle">У клініці LONO ви можете пройти діагностику, консультації та лікування в одному місці.</p>
-    </div>
-    <div class="services-tabs">
-      <span class="services-tab active">Гінекологія</span>
-      <span class="services-tab">Репродуктологія</span>
-      <span class="services-tab">Ембріологія</span>
-      <span class="services-tab">Консультації лікарів</span>
-      <span class="services-tab">Лабораторія</span>
-    </div>
-    <div class="service-card animate-on-scroll">
-      <div class="service-card-img">
-        <img src="assets/images/service-gynecology.jpg" alt="Гінекологія — консультація лікаря">
+    <div class="services-header">
+      <div class="section-header animate-on-scroll">
+        <h2 class="section-title">Наші послуги</h2>
+        <p class="section-subtitle">У клініці LONO ви можете пройти діагностику, консультації та лікування в одному місці.</p>
       </div>
-      <div class="service-card-content">
-        <span class="service-card-label">Гінекологія</span>
-        <h3 class="service-card-title">Жіноче здоров'я —<br>уважно і без поспіху</h3>
-        <p class="service-card-desc">Профілактика, лікування та ведення вагітності — в одному місці. Ми відповімо прийдемо з вас на ваші питання: не підганятимемо і не залишимося з нерозумінням.</p>
-        <a href="#" class="btn-text">Про гінекологію →</a>
+    </div>
+    <div class="services-content-area">
+      <div class="services-tabs" id="services-tabs">
+        <span class="services-tab active" data-service="gynecology">Гінекологія</span>
+        <span class="services-tab" data-service="reproductive">Репродуктологія</span>
+        <span class="services-tab" data-service="embryology">Ембріологія</span>
+        <span class="services-tab" data-service="consultations">Консультації лікарів</span>
+        <span class="services-tab" data-service="laboratory">Лабораторія</span>
+      </div>
+
+      <!-- Гінекологія -->
+      <div class="service-panel active" id="service-gynecology">
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="assets/images/service-gynecology.jpg" alt="Гінекологія — консультація лікаря">
+          </div>
+          <div class="service-card-content">
+            <span class="service-card-label">Гінекологія</span>
+            <h3 class="service-card-title">Жіноче здоров'я —<br>уважно і без поспіху</h3>
+            <p class="service-card-desc">Профілактика, лікування та ведення вагітності — в одному місці. На кожному прийомі є час на ваші питання: ми не підганяємо і не залишаємо з незрозумілим.</p>
+            <div class="service-cta">
+              <a href="#" class="btn btn-gold">Про гінекологію</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Репродуктологія -->
+      <div class="service-panel" id="service-reproductive">
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="assets/images/card-reproductive.jpg" alt="Репродуктологія">
+          </div>
+          <div class="service-card-content">
+            <span class="service-card-label">Репродуктологія</span>
+            <h3 class="service-card-title">Шлях до вагітності —<br>крок за кроком</h3>
+            <p class="service-card-desc">Діагностика безпліддя, консервативне лікування, інсемінація та ЕКЗ/ICSI. Індивідуальний план для кожної пари з підтримкою на кожному етапі.</p>
+            <div class="service-cta">
+              <a href="#" class="btn btn-gold">Про репродуктологію</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ембріологія -->
+      <div class="service-panel" id="service-embryology">
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="assets/images/card-pregnancy.jpg" alt="Ембріологія">
+          </div>
+          <div class="service-card-content">
+            <span class="service-card-label">Ембріологія</span>
+            <h3 class="service-card-title">Технології, що дають<br>найкращий результат</h3>
+            <p class="service-card-desc">ICSI, Time Lapse культивування, кріоконсервація ембріонів та ооцитів, ПГД — преімплантаційна генетична діагностика для підвищення шансів на успіх.</p>
+            <div class="service-cta">
+              <a href="#" class="btn btn-gold">Про ембріологію</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Консультації лікарів -->
+      <div class="service-panel" id="service-consultations">
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="assets/images/about-team.jpg" alt="Команда лікарів">
+          </div>
+          <div class="service-card-content">
+            <span class="service-card-label">Консультації лікарів</span>
+            <h3 class="service-card-title">Досвідчені спеціалісти —<br>для вашого здоров'я</h3>
+            <p class="service-card-desc">Гінеколог, гінеколог-ендокринолог, гінеколог-репродуктолог, уролог-андролог, ембріолог, генетик. Кожен лікар приділяє достатньо часу для ретельного огляду.</p>
+            <div class="service-cta">
+              <a href="#" class="btn btn-gold">Наша команда</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Лабораторія -->
+      <div class="service-panel" id="service-laboratory">
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="assets/images/hero-bg.jpg" alt="Лабораторія">
+          </div>
+          <div class="service-card-content">
+            <span class="service-card-label">Лабораторія</span>
+            <h3 class="service-card-title">Точна діагностика —<br>основа правильного лікування</h3>
+            <p class="service-card-desc">Загальноклінічні аналізи, гормональна панель, спермограма, ІПСШ, генетичні тестування — всі аналізи в одному місці з результатами за 1–3 дні.</p>
+            <div class="service-cta">
+              <a href="#" class="btn btn-gold">Лабораторні послуги</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ===== ABOUT ===== -->
   <section class="about" id="about">
-    <div class="about-card animate-on-scroll">
-      <div class="about-content">
-        <span class="about-logo">LONO</span>
-        <h2 class="about-title">LONO — Клініка репродуктології та жіночого здоров'я у Львові</h2>
-        <p class="about-desc">Ми спеціалізуємося на лікуванні безпліддя, гінекологічній допомозі та ендокринологічній підтримці.</p>
-        <p class="about-desc">Наш підхід — медицина, що поважає вас. Без чекр і будьякості, зате з увагою до деталей і часом, якого потребує кожен пацієнт.</p>
+    <div class="about-bg">
+      <img src="assets/images/about-bg.jpg" alt="Клініка LONO — фон">
+    </div>
+    <div class="about-inner">
+      <div class="about-content animate-on-scroll">
+        <div class="about-text">
+          <h2 class="about-title">LONO — Клініка репродуктології та жіночого здоров'я у Львові</h2>
+          <p class="about-desc">Ми спеціалізуємось на лікуванні безпліддя, гінекологічній допомозі та андрологічній підтримці.</p>
+          <p class="about-desc">Наш підхід — медицина, що поважає вас. Без черг і байдужості, зате з увагою до деталей і часом, якого потребує кожен пацієнт.</p>
+        </div>
         <a href="#" class="btn btn-gold" style="align-self: flex-start;">Про нас</a>
       </div>
-      <div class="about-img">
+      <div class="about-img animate-on-scroll">
         <img src="assets/images/about-team.jpg" alt="Команда лікарів клініки LONO">
       </div>
     </div>
@@ -1595,92 +2105,114 @@
       <div class="contact-form-inputs">
         <input type="text" class="form-input" placeholder="Ваше ім'я">
         <input type="tel" class="form-input" placeholder="Номер телефону">
-        <button class="btn btn-gold" style="width:100%;">Записатися</button>
+        <button class="btn btn-primary" style="width:100%;">Записатись</button>
         <p class="form-or">або зателефонуйте +38 063 12 34 567</p>
       </div>
     </div>
   </section>
 
-  <!-- ===== CONTACTS ===== -->
-  <section class="contacts" id="contacts">
-    <div class="section-header animate-on-scroll">
-      <h2 class="section-title">Контакти</h2>
-    </div>
-    <div class="contacts-grid">
-      <div class="contacts-info animate-on-scroll">
-        <div class="contact-item">
-          <span class="contact-icon">📍</span>
-          <span class="contact-text">79019, Україна, Львівська обл.,<br>м. Львів, Хімічна 44</span>
-        </div>
-        <div class="contact-item">
-          <span class="contact-icon">📞</span>
-          <span class="contact-text">+38 (077) 581 30 69, +38 063 583 58 63</span>
-        </div>
-        <div class="contact-item">
-          <span class="contact-icon">✉️</span>
-          <span class="contact-text">lono.clinika@gmail.com</span>
-        </div>
-        <div class="contact-item">
-          <span class="contact-icon">🕐</span>
-          <span class="contact-text">Графік роботи:<br>Пн-Пт: 08:00-20:00<br>Сб: 09:00-14:00</span>
+  <!-- ===== CONTACTS + FOOTER ===== -->
+  <div class="contacts-footer-wrapper" id="contacts">
+    <section class="contacts-section">
+      <div class="contacts-inner">
+        <h2 class="contacts-title animate-on-scroll">Контакти</h2>
+        <div class="contacts-grid animate-on-scroll">
+          <div class="contacts-info">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                  <circle cx="12" cy="9" r="2.5"/>
+                </svg>
+              </div>
+              <span class="contact-text">79019, Україна, Львівська обл.,<br>м. Львів, Хімічна 4е</span>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+                </svg>
+              </div>
+              <span class="contact-text">+38 077 383 38 83, +38 063 383 38 83</span>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="M22 4l-10 8L2 4"/>
+                </svg>
+              </div>
+              <span class="contact-text">lono.clinic@gmail.com</span>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
+                </svg>
+              </div>
+              <span class="contact-text">Графік роботи<br>Пн–Пт: 08:00–20:00<br>Сб: 09:00–16:00</span>
+            </div>
+          </div>
+          <div class="contacts-map">
+            <img src="assets/images/contacts-map.jpg" alt="Карта розташування клініки LONO, Львів">
+          </div>
         </div>
       </div>
-      <div class="contacts-map animate-on-scroll">
-        <img src="assets/images/contacts-map.jpg" alt="Карта розташування клініки LONO, Львів">
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="footer">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo"><img src="assets/icons/logo.svg" alt="LONO" height="32"></div>
-        <p class="footer-desc">Клініка репродуктології та жіночого здоров'я у Львові. Діагностика, лікування та супровід на кожному етапі.</p>
+    <footer class="footer">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <img src="assets/icons/logo.svg" alt="LONO" height="32" style="filter: brightness(0) invert(1);">
+          <p class="footer-brand-desc">Клініка репродуктології та жіночого здоров'я у Львові.<br>Діагностика, лікування та супровід на кожному етапі.</p>
+        </div>
+        <div class="footer-columns">
+          <div class="footer-col">
+            <h4 class="footer-col-title">Послуги</h4>
+            <ul class="footer-links">
+              <li><a href="#">Гінекологія</a></li>
+              <li><a href="#">Репродуктологія</a></li>
+              <li><a href="#">Ембріологія</a></li>
+              <li><a href="#">Консультації</a></li>
+              <li><a href="#">Лабораторія</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-title">Клініка</h4>
+            <ul class="footer-links">
+              <li><a href="#">Про нас</a></li>
+              <li><a href="#">Лікарі</a></li>
+              <li><a href="#">Блог</a></li>
+              <li><a href="#">Вакансії</a></li>
+              <li><a href="#">Співпраця / страхування</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 class="footer-col-title">Пацієнтам</h4>
+            <ul class="footer-links">
+              <li><a href="#">Пакети послуг</a></li>
+              <li><a href="#">Ціни</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Онлайн-запис</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div>
-        <h4 class="footer-col-title">Послуги</h4>
-        <ul class="footer-links">
-          <li><a href="#">Гінекологія</a></li>
-          <li><a href="#">Репродуктологія</a></li>
-          <li><a href="#">Ембріологія</a></li>
-          <li><a href="#">Консультації</a></li>
-          <li><a href="#">Лабораторія</a></li>
-        </ul>
+      <div class="footer-bottom">
+        <div class="footer-langs">
+          <span class="footer-lang active">УКР</span>
+          <span class="footer-lang">ENG</span>
+          <span class="footer-lang">PL</span>
+        </div>
+        <span class="footer-copyright">© LONO, 2026 Політика конфіденційності</span>
+        <div class="footer-social">
+          <a href="#" class="social-btn" aria-label="Instagram"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
+          <a href="#" class="social-btn" aria-label="Facebook"><img src="assets/icons/facebook.svg" alt="Facebook"></a>
+        </div>
       </div>
-      <div>
-        <h4 class="footer-col-title">Клініка</h4>
-        <ul class="footer-links">
-          <li><a href="#">Про нас</a></li>
-          <li><a href="#">Лікарі</a></li>
-          <li><a href="#">Блог</a></li>
-          <li><a href="#">Вакансії</a></li>
-          <li><a href="#">Етика і стандарти</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="footer-col-title">Пацієнтам</h4>
-        <ul class="footer-links">
-          <li><a href="#">Пам'ятка пацієнту</a></li>
-          <li><a href="#">Ціни</a></li>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Онлайн-запис</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-bottom-left">
-        <a href="#">УКР</a>
-        <a href="#">ENG</a>
-        <a href="#">PL</a>
-      </div>
-      <span class="footer-bottom-right">© LONO, 2026. Політика конфіденційності</span>
-      <div class="footer-social">
-        <a href="#" class="social-btn" aria-label="Instagram"><img src="assets/icons/instagram.svg" alt="Instagram" width="20" height="20"></a>
-        <a href="#" class="social-btn" aria-label="Facebook"><img src="assets/icons/facebook.svg" alt="Facebook" width="20" height="20"></a>
-      </div>
-    </div>
-  </footer>
+    </footer>
+  </div>
 
   <script>
     /* ===== Scroll Animations ===== */
@@ -1700,22 +2232,19 @@
     document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
 
     /* ===== Navbar scroll effect ===== */
-    let lastScroll = 0;
     window.addEventListener('scroll', () => {
       const navbar = document.getElementById('navbar');
-      const scrollY = window.scrollY;
-      if (scrollY > 50) {
+      if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
       } else {
         navbar.classList.remove('scrolled');
       }
-      lastScroll = scrollY;
     }, { passive: true });
 
     /* ===== Carousel ===== */
     function scrollCarousel(direction) {
       const container = document.getElementById('featured-cards');
-      const cardWidth = 384 + 32; // card width + gap
+      const cardWidth = 384 + 32;
       container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
     }
 
@@ -1735,19 +2264,46 @@
       document.body.style.overflow = '';
     }
 
-    /* ===== Package tabs ===== */
-    document.querySelectorAll('.packages-tab').forEach(tab => {
+    /* ===== Package tabs with real content switching ===== */
+    const packageTabs = document.querySelectorAll('.packages-tab');
+    const packageGrids = document.querySelectorAll('.packages-grid');
+
+    packageTabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        document.querySelectorAll('.packages-tab').forEach(t => t.classList.remove('active'));
+        const targetTab = tab.dataset.tab;
+
+        packageTabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
+
+        packageGrids.forEach(grid => grid.classList.remove('active'));
+        const targetGrid = document.getElementById('tab-' + targetTab);
+        if (targetGrid) {
+          targetGrid.classList.add('active');
+          /* Re-trigger animations */
+          targetGrid.querySelectorAll('.animate-on-scroll').forEach(el => {
+            el.classList.remove('visible');
+            setTimeout(() => observer.observe(el), 50);
+          });
+        }
       });
     });
 
-    /* ===== Service tabs ===== */
-    document.querySelectorAll('.services-tab').forEach(tab => {
+    /* ===== Service tabs with real content switching ===== */
+    const serviceTabs = document.querySelectorAll('.services-tab');
+    const servicePanels = document.querySelectorAll('.service-panel');
+
+    serviceTabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        document.querySelectorAll('.services-tab').forEach(t => t.classList.remove('active'));
+        const targetService = tab.dataset.service;
+
+        serviceTabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
+
+        servicePanels.forEach(panel => panel.classList.remove('active'));
+        const targetPanel = document.getElementById('service-' + targetService);
+        if (targetPanel) {
+          targetPanel.classList.add('active');
+        }
       });
     });
 
