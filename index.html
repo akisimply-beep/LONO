@@ -1709,8 +1709,9 @@
         grid-template-columns: 1fr;
       }
       .packages-grid.active .package-card:last-child { max-width: 100%; }
-      .packages-tabs { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
-      .packages-tabs::-webkit-scrollbar { display: none; }
+      .packages-tabs-wrapper { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; text-align: left; }
+      .packages-tabs-wrapper::-webkit-scrollbar { display: none; }
+      .packages-tabs { flex-wrap: nowrap; display: inline-flex; }
 
       .service-card {
         flex-direction: column;
