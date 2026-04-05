@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LONO — Клініка репродуктології та жіночого здоров'я у Львові</title>
+  <meta name="description" content="Клініка LONO у Львові: репродуктивна медицина, гінекологія, ЕКЗ. Досвідчена команда, сучасна лабораторія, індивідуальний підхід.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== CSS Custom Properties ===== */
+    :root {
+      /* Brand Colors — Violet palette */
+      --color-violet-950: #010017;
+      --color-violet-900: #040530;
+      --color-violet-800: #182350;
+      --color-violet-700: #313F6F;
+      --color-violet-600: #3B4A7B;
+      --color-violet-500: #506093;
+      --color-violet-400: #7284B9;
+      --color-violet-300: #96A9E0;
+      --color-violet-200: #B5C9FF;
+      --color-violet-100: #D0E0FF;
+      --color-violet-50: #F0F8FF;
+
+      /* Steel palette */
+      --color-steel-800: #062543;
+      --color-steel-700: #264465;
+      --color-steel-600: #314F71;
+      --color-steel-500: #466689;
+
+      /* Gold palette */
+      --color-gold-600: #68450D;
+      --color-gold-500: #805B28;
+      --color-gold-400: #A57E4B;
+      --color-gold-300: #B9915E;
+      --color-gold-200: #ECC28E;
+      --color-gold-100: #FFD9A4;
+      --color-gold-50: #FFF4D5;
+
+      /* Beige palette */
+      --color-beige-200: #CECAC0;
+      --color-beige-100: #E5E1D6;
+      --color-beige-50: #FEFAEF;
+
+      /* Rose */
+      --color-rose-200: #FFD3D3;
+      --color-rose-300: #F7C7C7;
+
+      /* Foreground */
+      --fg-solid: #1E1D1B;
+      --fg-primary: rgba(30, 29, 27, 0.87);
+      --fg-secondary: rgba(30, 29, 27, 0.65);
+      --fg-hint: rgba(30, 29, 27, 0.51);
+      --fg-disabled: rgba(30, 29, 27, 0.32);
+      --fg-divider: rgba(30, 29, 27, 0.24);
+      --fg-border: rgba(30, 29, 27, 0.16);
+      --fg-subtle-bg: rgba(30, 29, 27, 0.12);
+      --fg-hover-bg: rgba(30, 29, 27, 0.08);
+      --fg-surface: rgba(30, 29, 27, 0.04);
+
+      /* White foreground */
+      --white-solid: #FFFFFF;
+      --white-primary: rgba(255, 255, 255, 0.87);
+      --white-secondary: rgba(255, 255, 255, 0.65);
+      --white-border: rgba(255, 255, 255, 0.16);
+
+      /* Background */
+      --bg-page: #FDF8F1;
+      --bg-section: #F5F1EA;
+
+      /* Spacing */
+      --space-2: 2px;
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-48: 48px;
+      --space-64: 64px;
+      --space-80: 80px;
+
+      /* Radius */
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-pill: 48px;
+      --radius-full: 96px;
+
+      /* Typography */
+      --font-family: 'Geologica', sans-serif;
+    }
+
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--bg-page);
+      color: var(--fg-solid);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    /* ===== Animations ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .animate-on-scroll.visible:nth-child(2) { transition-delay: 0.1s; }
+    .animate-on-scroll.visible:nth-child(3) { transition-delay: 0.2s; }
+    .animate-on-scroll.visible:nth-child(4) { transition-delay: 0.3s; }
+
+    /* ===== Navbar ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-32);
+      background: rgba(253, 248, 241, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--fg-border);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      background: rgba(253, 248, 241, 0.95);
+      box-shadow: 0 1px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .navbar-logo {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      color: var(--fg-solid);
+    }
+
+    .navbar-nav {
+      display: flex;
+      gap: var(--space-8);
+      list-style: none;
+    }
+
+    .navbar-nav a {
+      padding: var(--space-8) var(--space-16);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.14px;
+      color: var(--fg-secondary);
+      border-radius: var(--radius-pill);
+      transition: color 0.3s ease, background 0.3s ease;
+    }
+
+    .navbar-nav a:hover {
+      color: var(--fg-solid);
+      background: var(--fg-hover-bg);
+    }
+
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-16);
+    }
+
+    .navbar-lang {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg-secondary);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .navbar-lang:hover { color: var(--fg-solid); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.14px;
+      padding: var(--space-12) var(--space-24);
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--color-rose-200);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .btn-primary {
+      background: var(--color-violet-800);
+      color: var(--white-solid);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-violet-700);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(24, 35, 80, 0.25);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(24, 35, 80, 0.2);
+    }
+
+    .btn-gold {
+      background: var(--color-gold-300);
+      color: var(--white-solid);
+    }
+
+    .btn-gold:hover {
+      background: var(--color-gold-400);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(185, 145, 94, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--fg-solid);
+      border-color: var(--fg-border);
+    }
+
+    .btn-outline:hover {
+      background: var(--fg-hover-bg);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: var(--space-8);
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--fg-solid);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* ===== Hero Section ===== */
+    .hero {
+      padding: 96px var(--space-16) var(--space-16);
+    }
+
+    .hero-container {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      min-height: 552px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: var(--space-80);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(72deg, rgba(24, 35, 80, 0.6) 0%, rgba(247, 199, 199, 0.16) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: var(--radius-md);
+      padding: var(--space-24);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-32);
+      max-width: 753px;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+      padding: 0 var(--space-32);
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0.16px;
+      color: var(--fg-secondary);
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 56px;
+      letter-spacing: -0.48px;
+      color: var(--fg-solid);
+    }
+
+    .hero-description {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--fg-secondary);
+    }
+
+    .hero-cta {
+      padding: 0 var(--space-32);
+    }
+
+    /* ===== Section Titles ===== */
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+      padding: 0 var(--space-32);
+      max-width: 904px;
+    }
+
+    .section-title {
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 56px;
+      letter-spacing: -0.48px;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0.16px;
+      color: var(--fg-secondary);
+    }
+
+    /* ===== Featured Services (Carousel) ===== */
+    .featured-services {
+      padding: var(--space-48) 0 var(--space-32);
+      padding-left: 112px;
+      background: linear-gradient(rgba(245, 241, 234, 0.2) 0%, rgb(245, 241, 234) 28%, rgb(245, 241, 234) 69%, rgba(245, 241, 234, 0.2) 100%);
+    }
+
+    .featured-services-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: var(--space-32);
+      padding-right: 112px;
+    }
+
+    .carousel-nav {
+      display: flex;
+      gap: var(--space-24);
+      align-items: center;
+    }
+
+    .carousel-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--fg-surface);
+      border: 1.5px solid var(--fg-hover-bg);
+      color: var(--fg-secondary);
+      font-size: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-btn:hover {
+      background: var(--fg-hover-bg);
+      color: var(--fg-solid);
+      transform: scale(1.05);
+    }
+
+    .carousel-btn.next {
+      background: var(--color-gold-300);
+      border-color: var(--color-rose-200);
+      color: white;
+    }
+
+    .carousel-btn.next:hover {
+      background: var(--color-gold-400);
+      transform: scale(1.05);
+    }
+
+    .featured-cards {
+      display: flex;
+      gap: var(--space-32);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      padding-right: 112px;
+      scroll-behavior: smooth;
+    }
+
+    .featured-cards::-webkit-scrollbar { display: none; }
+
+    .featured-card {
+      flex: 0 0 384px;
+      height: 564px;
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--color-rose-200);
+      overflow: hidden;
+      position: relative;
+      scroll-snap-align: start;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .featured-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(24, 35, 80, 0.15);
+    }
+
+    .featured-card-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .featured-card-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .featured-card:hover .featured-card-bg img {
+      transform: scale(1.05);
+    }
+
+    .featured-card-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at bottom center, rgba(24, 35, 80, 1) 0%, rgba(139, 145, 167, 0.5) 50%, transparent 100%);
+    }
+
+    .featured-card-inner {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-24);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      background: var(--white-border);
+      border-radius: var(--radius-lg);
+    }
+
+    .featured-card-tag {
+      align-self: flex-end;
+      padding: var(--space-12) var(--space-24);
+      border-radius: var(--radius-full);
+      background: var(--color-gold-300);
+      border: 1.5px solid var(--color-rose-200);
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
+      letter-spacing: 0.14px;
+      transition: all 0.3s ease;
+    }
+
+    .featured-card:hover .featured-card-tag {
+      background: var(--color-gold-400);
+      transform: scale(1.05);
+    }
+
+    .featured-card-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .featured-card-title {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 40px;
+      letter-spacing: -0.08px;
+      color: var(--white-solid);
+    }
+
+    .featured-card-desc {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0.16px;
+      color: var(--white-secondary);
+    }
+
+    /* ===== Packages Section ===== */
+    .packages {
+      padding: var(--space-48) 112px var(--space-32);
+    }
+
+    .packages-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-32);
+    }
+
+    .packages-tabs {
+      display: flex;
+      gap: var(--space-16);
+      padding: var(--space-4);
+      background: var(--fg-surface);
+      border: 1px solid var(--fg-subtle-bg);
+      border-radius: var(--radius-pill);
+    }
+
+    .packages-tab {
+      padding: var(--space-8) var(--space-16);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.14px;
+      color: var(--fg-solid);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .packages-tab.active {
+      background: var(--white-primary);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .packages-tab:hover:not(.active) {
+      background: var(--fg-hover-bg);
+    }
+
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-32);
+    }
+
+    .package-card {
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-24);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .package-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+    }
+
+    .package-card.light {
+      background: var(--color-beige-100);
+    }
+
+    .package-card.dark {
+      background: var(--color-steel-800);
+    }
+
+    .package-card.dark .package-label,
+    .package-card.dark .package-desc {
+      color: var(--white-secondary);
+    }
+
+    .package-card.dark .package-name,
+    .package-card.dark .package-price,
+    .package-card.dark .package-detail-text {
+      color: var(--white-solid);
+    }
+
+    .package-card.dark .package-check {
+      color: var(--color-gold-300);
+    }
+
+    .package-body {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
+    }
+
+    .package-label {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0.16px;
+      color: var(--fg-secondary);
+    }
+
+    .package-name {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 40px;
+      letter-spacing: -0.08px;
+    }
+
+    .package-desc {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0.16px;
+      color: var(--fg-secondary);
+    }
+
+    .package-price {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 40px;
+      letter-spacing: -0.08px;
+    }
+
+    .package-details {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .package-detail {
+      display: flex;
+      gap: var(--space-12);
+      align-items: flex-start;
+    }
+
+    .package-check {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-violet-800);
+      font-size: 18px;
+      margin-top: 2px;
+    }
+
+    .package-detail-text {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 28px;
+    }
+
+    .package-cta {
+      margin-top: var(--space-24);
+    }
+
+    /* ===== Services Section ===== */
+    .services {
+      padding: var(--space-48) 112px;
+    }
+
+    .services-tabs {
+      display: flex;
+      gap: var(--space-8);
+      margin: var(--space-32) 0;
+      flex-wrap: wrap;
+    }
+
+    .services-tab {
+      padding: var(--space-8) var(--space-16);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.14px;
+      color: var(--fg-secondary);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .services-tab.active {
+      background: var(--color-violet-800);
+      color: var(--white-solid);
+      border-color: var(--color-rose-200);
+    }
+
+    .services-tab:hover:not(.active) {
+      background: var(--fg-hover-bg);
+      color: var(--fg-solid);
+    }
+
+    .service-card {
+      display: flex;
+      background: var(--color-beige-100);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      min-height: 300px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .service-card:hover {
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+    }
+
+    .service-card-img {
+      flex: 0 0 45%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .service-card:hover .service-card-img img {
+      transform: scale(1.04);
+    }
+
+    .service-card-content {
+      flex: 1;
+      padding: var(--space-48);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
+      justify-content: center;
+    }
+
+    .service-card-label {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.14px;
+      color: var(--fg-secondary);
+    }
+
+    .service-card-title {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 40px;
+      letter-spacing: -0.25px;
+    }
+
+    .service-card-desc {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--fg-secondary);
+    }
+
+    .btn-text {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.14px;
+      color: var(--color-gold-300);
+      padding: var(--space-12) var(--space-24);
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--color-rose-200);
+      background: transparent;
+      transition: all 0.3s ease;
+    }
+
+    .btn-text:hover {
+      background: rgba(185, 145, 94, 0.08);
+      transform: translateX(4px);
+    }
+
+    /* ===== About Section ===== */
+    .about {
+      padding: var(--space-48) 112px;
+    }
+
+    .about-card {
+      display: flex;
+      background: var(--color-steel-800);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      min-height: 460px;
+    }
+
+    .about-content {
+      flex: 1;
+      padding: var(--space-64);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
+      justify-content: center;
+    }
+
+    .about-logo {
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: var(--white-secondary);
+    }
+
+    .about-title {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 40px;
+      letter-spacing: -0.25px;
+      color: var(--white-solid);
+    }
+
+    .about-desc {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--white-secondary);
+      max-width: 500px;
+    }
+
+    .about-img {
+      flex: 0 0 40%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .about-card:hover .about-img img {
+      transform: scale(1.03);
+    }
+
+    /* ===== Contact Form ===== */
+    .contact-form-section {
+      padding: var(--space-48) 112px;
+    }
+
+    .contact-form-card {
+      display: flex;
+      gap: var(--space-64);
+      align-items: center;
+      padding: var(--space-48) var(--space-64);
+    }
+
+    .contact-form-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .contact-form-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg-secondary);
+    }
+
+    .contact-form-title {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 40px;
+      letter-spacing: -0.25px;
+    }
+
+    .contact-form-desc {
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--fg-secondary);
+    }
+
+    .contact-form-inputs {
+      flex: 0 0 380px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: var(--space-16) var(--space-24);
+      font-family: var(--font-family);
+      font-size: 16px;
+      border: 1.5px solid var(--fg-border);
+      border-radius: var(--radius-md);
+      background: transparent;
+      color: var(--fg-solid);
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .form-input::placeholder {
+      color: var(--fg-hint);
+    }
+
+    .form-input:focus {
+      border-color: var(--color-violet-800);
+      box-shadow: 0 0 0 4px rgba(24, 35, 80, 0.08);
+    }
+
+    .form-or {
+      text-align: center;
+      font-size: 14px;
+      color: var(--fg-hint);
+    }
+
+    /* ===== Contacts Section ===== */
+    .contacts {
+      padding: var(--space-48) 112px;
+    }
+
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-48);
+      margin-top: var(--space-32);
+    }
+
+    .contacts-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-24);
+    }
+
+    .contact-item {
+      display: flex;
+      gap: var(--space-16);
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-violet-800);
+      font-size: 18px;
+    }
+
+    .contact-text {
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--fg-secondary);
+    }
+
+    .contacts-map {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--color-beige-100);
+      min-height: 300px;
+      position: relative;
+    }
+
+    .contacts-map img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      padding: var(--space-48) 112px;
+      border-top: 1px solid var(--fg-border);
+      margin-top: var(--space-48);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: var(--space-48);
+      margin-bottom: var(--space-48);
+    }
+
+    .footer-logo {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      margin-bottom: var(--space-16);
+    }
+
+    .footer-desc {
+      font-size: 14px;
+      line-height: 20px;
+      color: var(--fg-secondary);
+    }
+
+    .footer-col-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: var(--space-16);
+      color: var(--fg-solid);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .footer-links a {
+      font-size: 14px;
+      color: var(--fg-secondary);
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--fg-solid);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: var(--space-24);
+      border-top: 1px solid var(--fg-border);
+    }
+
+    .footer-bottom-left {
+      display: flex;
+      gap: var(--space-16);
+    }
+
+    .footer-bottom-left a {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--fg-hint);
+      transition: color 0.3s;
+    }
+
+    .footer-bottom-left a:hover { color: var(--fg-solid); }
+
+    .footer-bottom-right {
+      font-size: 12px;
+      color: var(--fg-hint);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: var(--space-12);
+    }
+
+    .social-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--fg-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--fg-secondary);
+      transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+      background: var(--fg-hover-bg);
+      color: var(--fg-solid);
+      transform: translateY(-2px);
+    }
+
+    /* ===== Mobile Menu ===== */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 80px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-page);
+      z-index: 99;
+      padding: var(--space-32);
+      flex-direction: column;
+      gap: var(--space-16);
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mobile-menu a {
+      font-size: 24px;
+      font-weight: 500;
+      padding: var(--space-16) 0;
+      border-bottom: 1px solid var(--fg-border);
+      display: block;
+      color: var(--fg-solid);
+    }
+
+    /* ===== RESPONSIVE ===== */
+
+    /* Tablet: 768px */
+    @media (max-width: 1200px) {
+      .featured-services { padding-left: var(--space-32); }
+      .featured-services-top { padding-right: var(--space-32); }
+      .featured-cards { padding-right: var(--space-32); }
+      .packages,
+      .services,
+      .about,
+      .contact-form-section,
+      .contacts,
+      .footer { padding-left: var(--space-32); padding-right: var(--space-32); }
+      .packages-grid { grid-template-columns: 1fr 1fr; }
+      .packages-grid .package-card:last-child {
+        grid-column: 1 / -1;
+        max-width: 50%;
+      }
+      .section-title, .hero-title {
+        font-size: 36px;
+        line-height: 44px;
+      }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--space-32); }
+    }
+
+    /* Mobile: 768px */
+    @media (max-width: 768px) {
+      .navbar-nav { display: none; }
+      .navbar-lang { display: none; }
+      .hamburger { display: flex; }
+
+      .navbar-actions .btn { display: none; }
+
+      .hero { padding: 88px var(--space-12) var(--space-12); }
+      .hero-container {
+        min-height: 460px;
+        padding: var(--space-24);
+      }
+      .hero-text { padding: 0; }
+      .hero-cta { padding: 0; }
+      .hero-title {
+        font-size: 32px;
+        line-height: 40px;
+      }
+
+      .featured-services {
+        padding-left: var(--space-16);
+        padding-right: 0;
+      }
+      .featured-services-top { padding-right: var(--space-16); }
+      .featured-cards { padding-right: var(--space-16); gap: var(--space-16); }
+      .featured-card {
+        flex: 0 0 300px;
+        height: 460px;
+      }
+      .section-title {
+        font-size: 28px;
+        line-height: 36px;
+      }
+      .section-header { padding: 0 var(--space-16); }
+
+      .packages,
+      .services,
+      .about,
+      .contact-form-section,
+      .contacts,
+      .footer {
+        padding-left: var(--space-16);
+        padding-right: var(--space-16);
+      }
+
+      .packages-grid {
+        grid-template-columns: 1fr;
+      }
+      .packages-grid .package-card:last-child { max-width: 100%; }
+      .packages-tabs { overflow-x: auto; flex-wrap: nowrap; }
+
+      .service-card {
+        flex-direction: column;
+      }
+      .service-card-img {
+        flex: none;
+        height: 220px;
+      }
+      .service-card-content {
+        padding: var(--space-24);
+      }
+      .service-card-title {
+        font-size: 24px;
+        line-height: 32px;
+      }
+
+      .about-card { flex-direction: column; }
+      .about-content { padding: var(--space-32); }
+      .about-img { flex: none; height: 280px; }
+      .about-title { font-size: 24px; line-height: 32px; }
+
+      .contact-form-card {
+        flex-direction: column;
+        padding: var(--space-24);
+        gap: var(--space-32);
+      }
+      .contact-form-inputs { flex: none; width: 100%; }
+      .contact-form-title { font-size: 24px; line-height: 32px; }
+
+      .contacts-grid { grid-template-columns: 1fr; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-16);
+        text-align: center;
+      }
+
+      .package-name, .package-price {
+        font-size: 24px;
+        line-height: 32px;
+      }
+
+      .carousel-nav { display: none; }
+    }
+
+    /* Small mobile: 375px */
+    @media (max-width: 420px) {
+      .featured-card { flex: 0 0 280px; height: 420px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .featured-card-title { font-size: 24px; line-height: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="navbar-logo"><img src="assets/icons/logo.svg" alt="LONO" height="32"></a>
+    <ul class="navbar-nav">
+      <li><a href="#packages">Пакети</a></li>
+      <li><a href="#services">Послуги</a></li>
+      <li><a href="#about">Команда</a></li>
+      <li><a href="#contacts">Контакти</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <span class="navbar-lang" style="cursor:pointer;"><img src="assets/icons/search.svg" alt="Пошук" width="20" height="20"></span>
+      <span class="navbar-lang">UA <img src="assets/icons/chevron-down.svg" alt="" width="16" height="16" style="vertical-align:middle;"></span>
+      <a href="#contact-form" class="btn btn-primary">Онлайн консультація</a>
+      <span class="navbar-lang" title="Особистий кабінет" style="cursor:pointer;"><img src="assets/icons/person.svg" alt="Кабінет" width="20" height="20"></span>
+      <div class="hamburger" id="hamburger" aria-label="Меню" role="button" tabindex="0">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#packages" onclick="closeMobileMenu()">Пакети</a>
+    <a href="#services" onclick="closeMobileMenu()">Послуги</a>
+    <a href="#about" onclick="closeMobileMenu()">Команда</a>
+    <a href="#contacts" onclick="closeMobileMenu()">Контакти</a>
+    <a href="#contact-form" class="btn btn-primary" style="text-align:center; margin-top: 16px;" onclick="closeMobileMenu()">Онлайн консультація</a>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-bg">
+        <img src="assets/images/hero-bg.jpg" alt="Інтер'єр клініки LONO — простір з природним світлом">
+      </div>
+      <div class="hero-content">
+        <div class="hero-text">
+          <p class="hero-subtitle">Клініка жіночого здоров'я та репродуктології - Львів</p>
+          <h1 class="hero-title">Знайдемо причину<br>Допоможемо стати батьками</h1>
+          <p class="hero-description">Репродуктивне та жіноче здоров'я з системним підходом і персональним супроводом</p>
+        </div>
+        <div class="hero-cta">
+          <a href="#contact-form" class="btn btn-primary">Записатись на консультацію</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURED SERVICES ===== -->
+  <section class="featured-services" id="featured">
+    <div class="featured-services-top">
+      <div class="section-header animate-on-scroll">
+        <h2 class="section-title">З чим ми можемо допомогти?</h2>
+        <p class="section-subtitle">Оберіть свій шлях</p>
+      </div>
+      <div class="carousel-nav">
+        <button class="carousel-btn prev" onclick="scrollCarousel(-1)" aria-label="Попередній">‹</button>
+        <button class="carousel-btn next" onclick="scrollCarousel(1)" aria-label="Наступний">›</button>
+      </div>
+    </div>
+    <div class="featured-cards" id="featured-cards">
+      <div class="featured-card animate-on-scroll">
+        <div class="featured-card-bg">
+          <img src="assets/images/card-gynecology.jpg" alt="Гінекологічний огляд">
+        </div>
+        <div class="featured-card-inner">
+          <span class="featured-card-tag">Гінекологічні пакети</span>
+          <div class="featured-card-info">
+            <h3 class="featured-card-title">Гінекологічний огляд</h3>
+            <p class="featured-card-desc">Регулярне обстеження для перевірки жіночого здоров'я</p>
+          </div>
+        </div>
+      </div>
+      <div class="featured-card animate-on-scroll">
+        <div class="featured-card-bg">
+          <img src="assets/images/card-reproductive.jpg" alt="Репродуктологія">
+        </div>
+        <div class="featured-card-inner">
+          <span class="featured-card-tag">Репродуктологія</span>
+          <div class="featured-card-info">
+            <h3 class="featured-card-title">Не вдається завагітніти</h3>
+            <p class="featured-card-desc">Допоможемо знайти причину та підібрати лікування.</p>
+          </div>
+        </div>
+      </div>
+      <div class="featured-card animate-on-scroll">
+        <div class="featured-card-bg">
+          <img src="assets/images/card-pregnancy.jpg" alt="Підготовка до вагітності">
+        </div>
+        <div class="featured-card-inner">
+          <span class="featured-card-tag">Підготовка до вагітності</span>
+          <div class="featured-card-info">
+            <h3 class="featured-card-title">Планую вагітність</h3>
+            <p class="featured-card-desc">Обстеження і консультація лікаря перед плануванням вагітності.</p>
+          </div>
+        </div>
+      </div>
+      <div class="featured-card animate-on-scroll">
+        <div class="featured-card-bg">
+          <img src="assets/images/card-male.jpg" alt="Чоловіче здоров'я">
+        </div>
+        <div class="featured-card-inner">
+          <span class="featured-card-tag">Чоловіче здоров'я</span>
+          <div class="featured-card-info">
+            <h3 class="featured-card-title">Чоловіче здоров'я</h3>
+            <p class="featured-card-desc">Спермограма та консультація андролога</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PACKAGES ===== -->
+  <section class="packages" id="packages">
+    <div class="packages-header">
+      <div class="section-header animate-on-scroll">
+        <h2 class="section-title">Готові рішення для різних ситуацій</h2>
+        <p class="section-subtitle">Пакети — це структурований план обстеження та лікування.</p>
+      </div>
+    </div>
+    <div class="packages-tabs">
+      <span class="packages-tab active">Гінекологічний чекап</span>
+      <span class="packages-tab">Підготовка до вагітності</span>
+      <span class="packages-tab">Свідоме батьківство</span>
+      <span class="packages-tab">Урологічний чекап</span>
+    </div>
+    <div class="packages-grid">
+      <div class="package-card light animate-on-scroll">
+        <div class="package-body">
+          <div>
+            <p class="package-label">Пакет S</p>
+            <h3 class="package-name">Базовий огляд</h3>
+            <p class="package-desc">Початкове обстеження для оцінки жіночого здоров'я.</p>
+          </div>
+          <p class="package-price">від ₴ 2 800 грн</p>
+          <div class="package-details">
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">Консультація гінеколога</span>
+            </div>
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">Мазок на флору</span>
+            </div>
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">ПАП-тест</span>
+            </div>
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">Трансвагінальне УЗД органів малого тазу</span>
+            </div>
+          </div>
+        </div>
+        <div class="package-cta">
+          <a href="#contact-form" class="btn btn-primary" style="width:100%;text-align:center;">Записатись</a>
+        </div>
+      </div>
+      <div class="package-card dark animate-on-scroll">
+        <div class="package-body">
+          <div>
+            <p class="package-label">Пакет M</p>
+            <h3 class="package-name">Розширений огляд</h3>
+            <p class="package-desc">Найпопулярніший пакет для комплексної перевірки здоров'я.</p>
+          </div>
+          <p class="package-price">від ₴ 2 800 грн</p>
+          <div class="package-details">
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">Все з Базового +</span>
+            </div>
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">Розширена кольпоскопія</span>
+            </div>
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">ПЛР на ВПЛ</span>
+            </div>
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">УЗД молочних залоз та щитоподібної залози</span>
+            </div>
+          </div>
+        </div>
+        <div class="package-cta">
+          <a href="#contact-form" class="btn btn-gold" style="width:100%;text-align:center;">Записатись</a>
+        </div>
+      </div>
+      <div class="package-card light animate-on-scroll">
+        <div class="package-body">
+          <div>
+            <p class="package-label">Пакет L</p>
+            <h3 class="package-name">Повний чекап</h3>
+            <p class="package-desc">Розширена діагностика з додатковими обстеженнями.</p>
+          </div>
+          <p class="package-price">від ₴ 2 800 грн</p>
+          <div class="package-details">
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">Все з Розширеного +</span>
+            </div>
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">Гормональна панель</span>
+            </div>
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">Онкомаркери</span>
+            </div>
+            <div class="package-detail">
+              <span class="package-check">✓</span>
+              <span class="package-detail-text">Консультація ендокринолога та УЗД</span>
+            </div>
+          </div>
+        </div>
+        <div class="package-cta">
+          <a href="#contact-form" class="btn btn-primary" style="width:100%;text-align:center;">Записатись</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section class="services" id="services">
+    <div class="section-header animate-on-scroll">
+      <h2 class="section-title">Наші послуги</h2>
+      <p class="section-subtitle">У клініці LONO ви можете пройти діагностику, консультації та лікування в одному місці.</p>
+    </div>
+    <div class="services-tabs">
+      <span class="services-tab active">Гінекологія</span>
+      <span class="services-tab">Репродуктологія</span>
+      <span class="services-tab">Ембріологія</span>
+      <span class="services-tab">Консультації лікарів</span>
+      <span class="services-tab">Лабораторія</span>
+    </div>
+    <div class="service-card animate-on-scroll">
+      <div class="service-card-img">
+        <img src="assets/images/service-gynecology.jpg" alt="Гінекологія — консультація лікаря">
+      </div>
+      <div class="service-card-content">
+        <span class="service-card-label">Гінекологія</span>
+        <h3 class="service-card-title">Жіноче здоров'я —<br>уважно і без поспіху</h3>
+        <p class="service-card-desc">Профілактика, лікування та ведення вагітності — в одному місці. Ми відповімо прийдемо з вас на ваші питання: не підганятимемо і не залишимося з нерозумінням.</p>
+        <a href="#" class="btn-text">Про гінекологію →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="about" id="about">
+    <div class="about-card animate-on-scroll">
+      <div class="about-content">
+        <span class="about-logo">LONO</span>
+        <h2 class="about-title">LONO — Клініка репродуктології та жіночого здоров'я у Львові</h2>
+        <p class="about-desc">Ми спеціалізуємося на лікуванні безпліддя, гінекологічній допомозі та ендокринологічній підтримці.</p>
+        <p class="about-desc">Наш підхід — медицина, що поважає вас. Без чекр і будьякості, зате з увагою до деталей і часом, якого потребує кожен пацієнт.</p>
+        <a href="#" class="btn btn-gold" style="align-self: flex-start;">Про нас</a>
+      </div>
+      <div class="about-img">
+        <img src="assets/images/about-team.jpg" alt="Команда лікарів клініки LONO">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT FORM ===== -->
+  <section class="contact-form-section" id="contact-form">
+    <div class="contact-form-card animate-on-scroll">
+      <div class="contact-form-text">
+        <span class="contact-form-label">Клініка LONO · Львів</span>
+        <h2 class="contact-form-title">Зробіть перший крок — ми допоможемо далі</h2>
+        <p class="contact-form-desc">Запишіться на консультацію за кілька хвилин. Адміністратор зв'яжеться з вами, щоб підтвердити час візиту.</p>
+      </div>
+      <div class="contact-form-inputs">
+        <input type="text" class="form-input" placeholder="Ваше ім'я">
+        <input type="tel" class="form-input" placeholder="Номер телефону">
+        <button class="btn btn-gold" style="width:100%;">Записатися</button>
+        <p class="form-or">або зателефонуйте +38 063 12 34 567</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACTS ===== -->
+  <section class="contacts" id="contacts">
+    <div class="section-header animate-on-scroll">
+      <h2 class="section-title">Контакти</h2>
+    </div>
+    <div class="contacts-grid">
+      <div class="contacts-info animate-on-scroll">
+        <div class="contact-item">
+          <span class="contact-icon">📍</span>
+          <span class="contact-text">79019, Україна, Львівська обл.,<br>м. Львів, Хімічна 44</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📞</span>
+          <span class="contact-text">+38 (077) 581 30 69, +38 063 583 58 63</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">✉️</span>
+          <span class="contact-text">lono.clinika@gmail.com</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🕐</span>
+          <span class="contact-text">Графік роботи:<br>Пн-Пт: 08:00-20:00<br>Сб: 09:00-14:00</span>
+        </div>
+      </div>
+      <div class="contacts-map animate-on-scroll">
+        <img src="assets/images/contacts-map.jpg" alt="Карта розташування клініки LONO, Львів">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><img src="assets/icons/logo.svg" alt="LONO" height="32"></div>
+        <p class="footer-desc">Клініка репродуктології та жіночого здоров'я у Львові. Діагностика, лікування та супровід на кожному етапі.</p>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Послуги</h4>
+        <ul class="footer-links">
+          <li><a href="#">Гінекологія</a></li>
+          <li><a href="#">Репродуктологія</a></li>
+          <li><a href="#">Ембріологія</a></li>
+          <li><a href="#">Консультації</a></li>
+          <li><a href="#">Лабораторія</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Клініка</h4>
+        <ul class="footer-links">
+          <li><a href="#">Про нас</a></li>
+          <li><a href="#">Лікарі</a></li>
+          <li><a href="#">Блог</a></li>
+          <li><a href="#">Вакансії</a></li>
+          <li><a href="#">Етика і стандарти</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Пацієнтам</h4>
+        <ul class="footer-links">
+          <li><a href="#">Пам'ятка пацієнту</a></li>
+          <li><a href="#">Ціни</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Онлайн-запис</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        <a href="#">УКР</a>
+        <a href="#">ENG</a>
+        <a href="#">PL</a>
+      </div>
+      <span class="footer-bottom-right">© LONO, 2026. Політика конфіденційності</span>
+      <div class="footer-social">
+        <a href="#" class="social-btn" aria-label="Instagram"><img src="assets/icons/instagram.svg" alt="Instagram" width="20" height="20"></a>
+        <a href="#" class="social-btn" aria-label="Facebook"><img src="assets/icons/facebook.svg" alt="Facebook" width="20" height="20"></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ===== Scroll Animations ===== */
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+    /* ===== Navbar scroll effect ===== */
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      const scrollY = window.scrollY;
+      if (scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+      lastScroll = scrollY;
+    }, { passive: true });
+
+    /* ===== Carousel ===== */
+    function scrollCarousel(direction) {
+      const container = document.getElementById('featured-cards');
+      const cardWidth = 384 + 32; // card width + gap
+      container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+    }
+
+    /* ===== Mobile menu ===== */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+
+    function closeMobileMenu() {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ===== Package tabs ===== */
+    document.querySelectorAll('.packages-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.packages-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+
+    /* ===== Service tabs ===== */
+    document.querySelectorAll('.services-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.services-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+
+    /* ===== Smooth scroll for anchor links ===== */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          const offset = 100;
+          const top = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
+
+    /* ===== Touch swipe for carousel ===== */
+    const carousel = document.getElementById('featured-cards');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    carousel.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - carousel.offsetLeft;
+      scrollLeft = carousel.scrollLeft;
+      carousel.style.cursor = 'grabbing';
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+      isDown = false;
+      carousel.style.cursor = '';
+    });
+
+    carousel.addEventListener('mouseup', () => {
+      isDown = false;
+      carousel.style.cursor = '';
+    });
+
+    carousel.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - carousel.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      carousel.scrollLeft = scrollLeft - walk;
+    });
+  </script>
+</body>
+</html>

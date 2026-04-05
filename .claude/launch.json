@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "lono-site",
+      "runtimeExecutable": "/opt/homebrew/bin/node",
+      "runtimeArgs": ["-e", "const h=require('http'),f=require('fs'),p=require('path'),port=process.env.PORT||8080,root='/Users/antonkhmilovskyi/Documents/Claude/Projects/Lono',mime={'.html':'text/html','.css':'text/css','.js':'application/javascript','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml'};h.createServer((q,r)=>{let u=q.url==='/'?'/index.html':q.url;let fp=p.join(root,u);f.readFile(fp,(e,d)=>{if(e){r.writeHead(404);r.end('Not found');return}r.writeHead(200,{'Content-Type':mime[p.extname(fp)]||'text/plain'});r.end(d)});}).listen(port,()=>console.log('Serving on '+port))"],
+      "port": 8080,
+      "autoPort": true
+    }
+  ]
+}
