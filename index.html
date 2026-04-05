@@ -673,14 +673,16 @@
       padding-right: 112px;
     }
 
-    /* Nav buttons — fixed to grid edge, outside scroll container */
+    /* Nav buttons — right-aligned to 3rd card's right edge */
     .featured-carousel-nav {
       display: flex;
       gap: var(--space-24);
       align-items: center;
-      /* Align under 3rd card: padding-left = section padding + 2 cards + 2 gaps */
-      padding-left: calc(112px + 384px + 32px + 384px + 32px);
-      margin-top: 0;
+      justify-content: flex-end;
+      /* Nav is inside section with padding-left:112px, so its width = viewport - 112
+         3rd card right edge from nav left = 3*384 + 2*32 = 1216px */
+      padding-right: calc(100% - 384px * 3 - 32px * 2);
+      margin-top: var(--space-24);
       position: relative;
       z-index: 2;
     }
@@ -1599,6 +1601,9 @@
       .featured-services { padding-left: var(--space-32); }
       .featured-services-top { padding-right: var(--space-32); }
       .featured-cards { padding-right: var(--space-32); }
+      .featured-carousel-nav {
+        padding-right: var(--space-32);
+      }
       .packages,
       .services,
       .contact-form-section { padding-left: var(--space-32); padding-right: var(--space-32); }
@@ -1653,7 +1658,14 @@
       .featured-card {
         flex: 0 0 300px;
       }
-      .featured-carousel-nav { padding-left: calc(var(--space-16) + 300px + 16px + 300px + 16px); }
+      .featured-card-bg {
+        width: 340px;
+        height: 500px;
+      }
+      .featured-carousel-nav {
+        padding-right: var(--space-16);
+        justify-content: flex-end;
+      }
 
       .section-title, .contacts-title {
         font-size: 28px;
@@ -1736,11 +1748,11 @@
         line-height: 32px;
       }
 
-      .featured-carousel-nav { display: none; }
     }
 
     @media (max-width: 420px) {
       .featured-card { flex: 0 0 280px; }
+      .featured-card-bg { width: 320px; height: 470px; }
       .footer-columns { flex-direction: column; }
       .footer-col { width: 100%; }
       .featured-card-title { font-size: 24px; line-height: 32px; }
