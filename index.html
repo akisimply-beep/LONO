@@ -860,8 +860,10 @@
     .featured-card-tag {
       padding: 12px 24px;
       border-radius: 96px;
-      background: #b9915e;
-      border: 1.5px solid #ffd3d3;
+      border: 1.5px solid transparent;
+      background:
+        linear-gradient(306deg, rgba(185, 145, 94, 0.80) 26.75%, rgba(247, 199, 199, 0.80) 136.69%) padding-box,
+        linear-gradient(306deg, #FFD3D3, #FFD3D3) border-box;
       font-size: 14px;
       font-weight: 500;
       line-height: 20px;
@@ -871,7 +873,9 @@
     }
 
     .featured-card:hover .featured-card-tag {
-      background: var(--color-gold-400);
+      background:
+        linear-gradient(306deg, rgba(185, 145, 94, 0.95) 26.75%, rgba(247, 199, 199, 0.95) 136.69%) padding-box,
+        linear-gradient(306deg, #FFD3D3, #FFD3D3) border-box;
       transform: scale(1.05);
     }
 
