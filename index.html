@@ -475,7 +475,18 @@
     .btn-primary {
       background: linear-gradient(151deg, rgba(24, 35, 80, 0.70) 17.68%, rgba(55, 80, 182, 0.70) 83.02%);
       color: var(--white-solid);
-      border-color: #ffd3d3;
+      border: 1.5px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: 48px;
+      background: linear-gradient(151deg, #FFD3D3, #506093);
+      z-index: -1;
     }
 
     .btn-primary:hover {
