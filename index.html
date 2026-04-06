@@ -489,23 +489,33 @@
     }
 
     .btn-ghost {
-      background: var(--fg-surface);
-      border-color: var(--fg-hover-bg);
-      color: var(--fg-solid);
+      color: var(--white-solid);
+      border: 1.5px solid transparent;
+      background:
+        linear-gradient(306deg, rgba(185, 145, 94, 0.80) 26.75%, rgba(247, 199, 199, 0.80) 136.69%) padding-box,
+        linear-gradient(306deg, #FFD3D3, #FFD3D3) border-box;
     }
 
     .btn-ghost:hover {
-      background: var(--fg-hover-bg);
-      color: var(--color-gold-400);
+      background:
+        linear-gradient(306deg, rgba(185, 145, 94, 0.95) 26.75%, rgba(247, 199, 199, 0.95) 136.69%) padding-box,
+        linear-gradient(306deg, #FFD3D3, #FFD3D3) border-box;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(185, 145, 94, 0.3);
     }
 
     .btn-gold {
-      background: var(--color-gold-300);
       color: var(--white-solid);
+      border: 1.5px solid transparent;
+      background:
+        linear-gradient(306deg, rgba(185, 145, 94, 0.80) 26.75%, rgba(247, 199, 199, 0.80) 136.69%) padding-box,
+        linear-gradient(306deg, #FFD3D3, #FFD3D3) border-box;
     }
 
     .btn-gold:hover {
-      background: var(--color-gold-400);
+      background:
+        linear-gradient(306deg, rgba(185, 145, 94, 0.95) 26.75%, rgba(247, 199, 199, 0.95) 136.69%) padding-box,
+        linear-gradient(306deg, #FFD3D3, #FFD3D3) border-box;
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(185, 145, 94, 0.3);
     }
