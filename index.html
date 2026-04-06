@@ -473,25 +473,17 @@
     }
 
     .btn-primary {
-      background: linear-gradient(151deg, rgba(24, 35, 80, 0.70) 17.68%, rgba(55, 80, 182, 0.70) 83.02%);
       color: var(--white-solid);
       border: 1.5px solid transparent;
-      background-clip: padding-box;
-      position: relative;
-    }
-
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      inset: -1.5px;
-      border-radius: 48px;
-      background: linear-gradient(151deg, #FFD3D3, #506093);
-      z-index: -1;
+      background:
+        linear-gradient(151deg, rgba(24, 35, 80, 0.70) 17.68%, rgba(55, 80, 182, 0.70) 83.02%) padding-box,
+        linear-gradient(151deg, #FFD3D3, #506093) border-box;
     }
 
     .btn-primary:hover {
-      background: linear-gradient(151deg, rgba(24, 35, 80, 0.92) 17.68%, rgba(55, 80, 182, 0.92) 83.02%);
-      background-clip: padding-box;
+      background:
+        linear-gradient(151deg, rgba(24, 35, 80, 0.92) 17.68%, rgba(55, 80, 182, 0.92) 83.02%) padding-box,
+        linear-gradient(151deg, #FFD3D3, #506093) border-box;
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(24, 35, 80, 0.3);
     }
