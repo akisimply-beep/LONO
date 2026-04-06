@@ -567,6 +567,14 @@
     /* ===== Hero Section ===== */
     .hero {
       padding: 96px var(--space-16) var(--space-16);
+      background: radial-gradient(ellipse 1440px 584px at 50% 50%,
+        rgba(24, 35, 80, 0.20) 0%,
+        rgba(52, 66, 114, 0.20) 9%,
+        rgba(80, 96, 147, 0.20) 19%,
+        rgba(123, 134, 171, 0.20) 39%,
+        rgba(167, 172, 196, 0.10) 60%,
+        transparent 100%
+      );
     }
 
     .hero-container {
@@ -677,7 +685,10 @@
       position: relative;
       padding: var(--space-48) 0 var(--space-32);
       padding-left: 112px;
-      background: linear-gradient(rgba(245, 241, 234, 0.2) 0%, rgb(245, 241, 234) 28%, rgb(245, 241, 234) 69%, rgba(245, 241, 234, 0.2) 100%);
+      background: linear-gradient(to bottom,
+        rgba(212, 165, 83, 0.12) 0%,
+        rgba(253, 248, 241, 0.12) 100%
+      );
     }
 
     .featured-services-top {
@@ -905,6 +916,14 @@
     /* ===== Packages Section ===== */
     .packages {
       padding: var(--space-48) 112px var(--space-32);
+      background: radial-gradient(ellipse 1440px 776px at 50% 50%,
+        rgba(24, 35, 80, 0.20) 0%,
+        rgba(52, 66, 114, 0.20) 12%,
+        rgba(80, 96, 147, 0.20) 23%,
+        rgba(123, 134, 171, 0.20) 42%,
+        rgba(167, 172, 196, 0.10) 62%,
+        transparent 100%
+      );
     }
 
     .packages-header {
@@ -1080,6 +1099,10 @@
     /* ===== Services Section ===== */
     .services {
       padding: var(--space-48) 112px;
+      background: linear-gradient(to bottom,
+        rgba(253, 248, 241, 0.12) 0%,
+        rgba(212, 165, 83, 0.12) 100%
+      );
     }
 
     .services-header {
@@ -1291,7 +1314,7 @@
       gap: var(--space-32);
       align-items: center;
       padding: var(--space-32);
-      background: var(--bg-section);
+      background: linear-gradient(172deg, rgba(239, 235, 224, 0.8) 0%, rgba(229, 225, 214, 0.8) 100%);
       border-radius: var(--radius-lg);
     }
 
