@@ -790,6 +790,12 @@
       transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
       will-change: transform;
       align-items: flex-start;
+      cursor: grab;
+    }
+
+    .featured-cards.is-dragging {
+      cursor: grabbing;
+      user-select: none;
     }
 
     /* Card outer — border, radius, clips oversized image */
@@ -2555,28 +2561,47 @@
 
       /* Touch/drag support — desktop only */
       let dragStartX = 0, dragDelta = 0, isDragging = false;
+      const maxIndex = () => Math.max(0, cards.length - 3);
+
       track.addEventListener('pointerdown', (e) => {
         if (isMobile()) return;
         isDragging = true;
         dragStartX = e.clientX;
         dragDelta = 0;
         track.style.transition = 'none';
+        track.classList.add('is-dragging');
         track.setPointerCapture(e.pointerId);
       });
+
       track.addEventListener('pointermove', (e) => {
         if (!isDragging) return;
+        e.preventDefault();
         dragDelta = e.clientX - dragStartX;
-        const offset = currentIndex * STEP - dragDelta;
+        /* Rubber-band at edges */
+        let offset = currentIndex * STEP - dragDelta;
+        if (offset < 0) offset = offset * 0.3;
+        const maxOffset = maxIndex() * STEP;
+        if (offset > maxOffset) offset = maxOffset + (offset - maxOffset) * 0.3;
         track.style.transform = `translateX(-${offset}px)`;
       });
-      track.addEventListener('pointerup', (e) => {
+
+      const endDrag = () => {
         if (!isDragging) return;
         isDragging = false;
         track.style.transition = '';
-        const threshold = STEP * 0.25;
-        if (dragDelta < -threshold && currentIndex < cards.length - 3) currentIndex++;
+        track.classList.remove('is-dragging');
+        const threshold = STEP * 0.2;
+        if (dragDelta < -threshold && currentIndex < maxIndex()) currentIndex++;
         else if (dragDelta > threshold && currentIndex > 0) currentIndex--;
         updateCarousel();
+      };
+
+      track.addEventListener('pointerup', endDrag);
+      track.addEventListener('pointercancel', endDrag);
+
+      /* Prevent click on links/cards after drag */
+      track.addEventListener('click', (e) => {
+        if (Math.abs(dragDelta) > 5) e.preventDefault();
       });
 
       /* Init */
