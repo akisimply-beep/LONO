@@ -1386,84 +1386,6 @@
       padding-top: var(--space-48);
     }
 
-    .contacts-section {
-      padding: 0 112px;
-      background: linear-gradient(to bottom, var(--bg-page) 0%, var(--color-violet-800) 100%);
-      padding-bottom: 0;
-    }
-
-    .contacts-inner {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-32);
-      padding-bottom: var(--space-56);
-    }
-
-    .contacts-title {
-      font-size: 48px;
-      font-weight: 400;
-      line-height: 56px;
-      letter-spacing: -0.48px;
-      color: var(--fg-solid);
-    }
-
-    .contacts-grid {
-      display: flex;
-      gap: var(--space-12);
-      align-items: center;
-    }
-
-    .contacts-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-12);
-    }
-
-    .contact-item {
-      display: flex;
-      gap: var(--space-12);
-      align-items: center;
-    }
-
-    .contact-icon {
-      width: 48px;
-      height: 48px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 50px;
-    }
-
-    .contact-icon svg {
-      width: 24px;
-      height: 24px;
-      color: var(--white-primary);
-    }
-
-    .contact-text {
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 24px;
-      color: var(--white-solid);
-    }
-
-    .contacts-map {
-      flex: 0 0 698px;
-      height: 326px;
-      border-radius: 32px;
-      overflow: hidden;
-      opacity: 0.9;
-    }
-
-    .contacts-map img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
     /* ===== Footer ===== */
     .footer {
       background: var(--color-violet-800);
@@ -1659,7 +1581,6 @@
       .packages,
       .services,
       .contact-form-section { padding-left: var(--space-32); padding-right: var(--space-32); }
-      .contacts-section { padding-left: var(--space-32); padding-right: var(--space-32); }
       .footer { padding-left: var(--space-32); padding-right: var(--space-32); }
       .about-inner { padding-left: var(--space-32); padding-right: var(--space-32); }
       .packages-grid.active { grid-template-columns: 1fr 1fr; }
@@ -1674,7 +1595,6 @@
       .footer-columns { gap: var(--space-16); }
       .footer-col { width: auto; }
       .about-img { flex: 0 0 400px; height: 340px; }
-      .contacts-map { flex: 0 0 50%; }
       .service-card-img { flex: 0 0 360px; height: 300px; }
     }
 
@@ -1736,7 +1656,7 @@
         height: 500px;
       }
 
-      .section-title, .contacts-title {
+      .section-title {
         font-size: 28px;
         line-height: 36px;
       }
@@ -1745,10 +1665,6 @@
       .packages,
       .services,
       .contact-form-section {
-        padding-left: var(--space-16);
-        padding-right: var(--space-16);
-      }
-      .contacts-section {
         padding-left: var(--space-16);
         padding-right: var(--space-16);
       }
@@ -1799,9 +1715,6 @@
       }
       .contact-form-inputs { flex: none; width: 100%; }
       .contact-form-title { font-size: 28px; line-height: 36px; }
-
-      .contacts-grid { flex-direction: column; gap: var(--space-32); }
-      .contacts-map { flex: none; width: 100%; height: 240px; }
 
       .footer-main { flex-direction: column; gap: var(--space-32); }
       .footer-columns { flex-wrap: wrap; gap: var(--space-24); }
@@ -2476,54 +2389,6 @@
 
   <!-- ===== CONTACTS + FOOTER ===== -->
   <div class="contacts-footer-wrapper" id="contacts">
-    <section class="contacts-section">
-      <div class="contacts-inner">
-        <h2 class="contacts-title animate-on-scroll">Контакти</h2>
-        <div class="contacts-grid animate-on-scroll">
-          <div class="contacts-info">
-            <div class="contact-item">
-              <div class="contact-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-                  <circle cx="12" cy="9" r="2.5"/>
-                </svg>
-              </div>
-              <span class="contact-text">79019, Україна, Львівська обл.,<br>м. Львів, Хімічна 4е</span>
-            </div>
-            <div class="contact-item">
-              <div class="contact-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
-                </svg>
-              </div>
-              <span class="contact-text">+38 077 383 38 83, +38 063 383 38 83</span>
-            </div>
-            <div class="contact-item">
-              <div class="contact-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <rect x="2" y="4" width="20" height="16" rx="2"/>
-                  <path d="M22 4l-10 8L2 4"/>
-                </svg>
-              </div>
-              <span class="contact-text">lono.clinic@gmail.com</span>
-            </div>
-            <div class="contact-item">
-              <div class="contact-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M12 6v6l4 2"/>
-                </svg>
-              </div>
-              <span class="contact-text">Графік роботи<br>Пн–Пт: 08:00–20:00<br>Сб: 09:00–16:00</span>
-            </div>
-          </div>
-          <div class="contacts-map">
-            <img src="assets/images/contacts-map.jpg" alt="Карта розташування клініки LONO, Львів">
-          </div>
-        </div>
-      </div>
-    </section>
-
     <footer class="footer">
       <div class="footer-main">
         <div class="footer-brand">
