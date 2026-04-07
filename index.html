@@ -689,8 +689,8 @@
       top: 0;
       left: 0;
       bottom: 0;
-      width: 112px;
-      background: linear-gradient(to right, var(--bg-page) 0%, transparent 100%);
+      width: 120px;
+      background: linear-gradient(to right, var(--bg-page) 85%, transparent 100%);
       z-index: 3;
       pointer-events: none;
     }
@@ -1591,6 +1591,7 @@
     @media (max-width: 1200px) {
       .navbar { padding: 0 var(--space-32); }
       .featured-services { padding-left: var(--space-32); }
+      .featured-services::before { width: 40px; }
       .featured-services-top { padding-right: var(--space-32); }
       .featured-cards { padding-right: var(--space-32); }
       .featured-carousel-nav {
