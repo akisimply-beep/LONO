@@ -698,12 +698,11 @@
       gap: var(--space-24);
       align-items: center;
       justify-content: flex-end;
-      /* Nav is inside section with padding-left:112px, so its width = viewport - 112
-         3rd card right edge from nav left = 3*384 + 2*32 = 1216px */
+      /* Buttons align with bottom of tallest card (600px), next to shortest card (528px) */
       padding-right: calc(100% - 384px * 3 - 32px * 2);
-      margin-top: var(--space-24);
+      margin-top: -48px;
       position: relative;
-      z-index: 2;
+      z-index: 4;
     }
 
     /* Carousel nav buttons — per Figma: 48px, round, padding 4px + 8px + 24px icon */
@@ -872,10 +871,8 @@
     .featured-card-tag {
       padding: 12px 24px;
       border-radius: 96px;
-      border: 1.5px solid transparent;
-      background:
-        linear-gradient(306deg, rgba(185, 145, 94, 0.80) 26.75%, rgba(247, 199, 199, 0.80) 136.69%) padding-box,
-        linear-gradient(306deg, #FFD3D3, #FFD3D3) border-box;
+      border: 1.5px solid #ffd3d3;
+      background: linear-gradient(306deg, rgba(185, 145, 94, 0.80) 26.75%, rgba(247, 199, 199, 0.80) 136.69%);
       font-size: 14px;
       font-weight: 500;
       line-height: 20px;
@@ -885,9 +882,7 @@
     }
 
     .featured-card:hover .featured-card-tag {
-      background:
-        linear-gradient(306deg, rgba(185, 145, 94, 0.95) 26.75%, rgba(247, 199, 199, 0.95) 136.69%) padding-box,
-        linear-gradient(306deg, #FFD3D3, #FFD3D3) border-box;
+      background: linear-gradient(306deg, rgba(185, 145, 94, 0.95) 26.75%, rgba(247, 199, 199, 0.95) 136.69%);
       transform: scale(1.05);
     }
 
