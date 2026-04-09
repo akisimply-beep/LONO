@@ -566,10 +566,24 @@
       border-radius: var(--radius-lg);
       overflow: hidden;
       height: 552px;
+    }
+
+    /* Hero slides */
+    .hero-slide {
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       padding: var(--space-80);
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .hero-bg {
@@ -603,7 +617,10 @@
       flex-direction: column;
       gap: var(--space-32);
       max-width: 753px;
-      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+
+    .hero-slide.active .hero-content {
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
     }
 
     .hero-text {
@@ -638,6 +655,34 @@
 
     .hero-cta {
       padding: 0 var(--space-32);
+    }
+
+    /* Hero slider dots */
+    .hero-dots {
+      position: absolute;
+      bottom: var(--space-32);
+      right: var(--space-32);
+      z-index: 2;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .hero-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .hero-dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background: var(--white-solid);
     }
 
     /* ===== Section Titles ===== */
@@ -1596,6 +1641,8 @@
       .hero-container {
         height: auto;
         min-height: 460px;
+      }
+      .hero-slide {
         padding: var(--space-24);
       }
       .hero-text { padding: 0; }
@@ -1603,6 +1650,10 @@
       .hero-title {
         font-size: 32px;
         line-height: 40px;
+      }
+      .hero-dots {
+        bottom: var(--space-16);
+        right: var(--space-16);
       }
 
       .featured-services {
@@ -1768,18 +1819,59 @@
   <!-- ===== HERO ===== -->
   <section class="hero">
     <div class="hero-container">
-      <div class="hero-bg">
-        <img src="assets/images/hero-bg.jpg" alt="Інтер'єр клініки LONO — простір з природним світлом">
+      <!-- Slide 1 -->
+      <div class="hero-slide active">
+        <div class="hero-bg">
+          <img src="assets/images/hero-bg.jpg" alt="Інтер'єр клініки LONO — простір з природним світлом">
+        </div>
+        <div class="hero-content">
+          <div class="hero-text">
+            <p class="hero-subtitle">Клініка жіночого здоров'я та репродуктології - Львів</p>
+            <h1 class="hero-title">Знайдемо причину<br>Допоможемо стати батьками</h1>
+            <p class="hero-description">Репродуктивне та жіноче здоров'я з системним підходом і персональним супроводом</p>
+          </div>
+          <div class="hero-cta">
+            <a href="#contact-form" class="btn btn-primary">Записатись на консультацію</a>
+          </div>
+        </div>
       </div>
-      <div class="hero-content">
-        <div class="hero-text">
-          <p class="hero-subtitle">Клініка жіночого здоров'я та репродуктології - Львів</p>
-          <h1 class="hero-title">Знайдемо причину<br>Допоможемо стати батьками</h1>
-          <p class="hero-description">Репродуктивне та жіноче здоров'я з системним підходом і персональним супроводом</p>
+      <!-- Slide 2 -->
+      <div class="hero-slide">
+        <div class="hero-bg">
+          <img src="assets/images/hero-bg.jpg" alt="Клініка LONO — сучасна лабораторія">
         </div>
-        <div class="hero-cta">
-          <a href="#contact-form" class="btn btn-primary">Записатись на консультацію</a>
+        <div class="hero-content">
+          <div class="hero-text">
+            <p class="hero-subtitle">Досвідчена команда · Сучасна лабораторія</p>
+            <h2 class="hero-title">Діагностика та лікування<br>жіночого безпліддя</h2>
+            <p class="hero-description">Від першої консультації до позитивного результату — індивідуальний план для кожної пари</p>
+          </div>
+          <div class="hero-cta">
+            <a href="#packages" class="btn btn-primary">Переглянути пакети</a>
+          </div>
         </div>
+      </div>
+      <!-- Slide 3 -->
+      <div class="hero-slide">
+        <div class="hero-bg">
+          <img src="assets/images/hero-bg.jpg" alt="Клініка LONO — консультація з лікарем">
+        </div>
+        <div class="hero-content">
+          <div class="hero-text">
+            <p class="hero-subtitle">Гінекологія · Репродуктологія · Ембріологія</p>
+            <h2 class="hero-title">Повний спектр послуг<br>в одній клініці</h2>
+            <p class="hero-description">Профілактика, діагностика, лікування та супровід — без черг і поспіху</p>
+          </div>
+          <div class="hero-cta">
+            <a href="#services" class="btn btn-primary">Наші послуги</a>
+          </div>
+        </div>
+      </div>
+      <!-- Dots -->
+      <div class="hero-dots">
+        <button class="hero-dot active" aria-label="Слайд 1"></button>
+        <button class="hero-dot" aria-label="Слайд 2"></button>
+        <button class="hero-dot" aria-label="Слайд 3"></button>
       </div>
     </div>
   </section>
@@ -2439,6 +2531,61 @@
   </div>
 
   <script>
+    /* ===== Hero Slider ===== */
+    (() => {
+      const slides = document.querySelectorAll('.hero-slide');
+      const dots = document.querySelectorAll('.hero-dot');
+      let current = 0;
+      let interval;
+      const DELAY = 6000;
+
+      const goTo = (index) => {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = index;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+      };
+
+      const next = () => goTo((current + 1) % slides.length);
+
+      const startAuto = () => {
+        clearInterval(interval);
+        interval = setInterval(next, DELAY);
+      };
+
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          if (i === current) return;
+          goTo(i);
+          startAuto();
+        });
+      });
+
+      /* Swipe support */
+      const container = document.querySelector('.hero-container');
+      let startX = 0;
+      let dragging = false;
+
+      container.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        dragging = true;
+      }, { passive: true });
+
+      container.addEventListener('touchend', (e) => {
+        if (!dragging) return;
+        dragging = false;
+        const diff = startX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) goTo((current + 1) % slides.length);
+          else goTo((current - 1 + slides.length) % slides.length);
+          startAuto();
+        }
+      }, { passive: true });
+
+      startAuto();
+    })();
+
     /* ===== Scroll Animations ===== */
     const observerOptions = {
       threshold: 0.1,
