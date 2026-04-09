@@ -568,22 +568,20 @@
       height: 552px;
     }
 
-    /* Hero slides */
+    /* Hero slides track */
+    .hero-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     .hero-slide {
-      position: absolute;
-      inset: 0;
+      position: relative;
+      min-width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       padding: var(--space-80);
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      pointer-events: none;
-    }
-
-    .hero-slide.active {
-      opacity: 1;
-      pointer-events: auto;
     }
 
     .hero-bg {
@@ -617,10 +615,6 @@
       flex-direction: column;
       gap: var(--space-32);
       max-width: 753px;
-    }
-
-    .hero-slide.active .hero-content {
-      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
     }
 
     .hero-text {
@@ -1642,9 +1636,7 @@
         height: auto;
         min-height: 460px;
       }
-      .hero-slide {
-        padding: var(--space-24);
-      }
+      .hero-slide { padding: var(--space-24); }
       .hero-text { padding: 0; }
       .hero-cta { padding: 0; }
       .hero-title {
@@ -1819,51 +1811,53 @@
   <!-- ===== HERO ===== -->
   <section class="hero">
     <div class="hero-container">
-      <!-- Slide 1 -->
-      <div class="hero-slide active">
-        <div class="hero-bg">
-          <img src="assets/images/hero-bg.jpg" alt="Інтер'єр клініки LONO — простір з природним світлом">
-        </div>
-        <div class="hero-content">
-          <div class="hero-text">
-            <p class="hero-subtitle">Клініка жіночого здоров'я та репродуктології - Львів</p>
-            <h1 class="hero-title">Знайдемо причину<br>Допоможемо стати батьками</h1>
-            <p class="hero-description">Репродуктивне та жіноче здоров'я з системним підходом і персональним супроводом</p>
+      <div class="hero-track" id="hero-track">
+        <!-- Slide 1: Головний — місія клініки -->
+        <div class="hero-slide">
+          <div class="hero-bg">
+            <img src="assets/images/hero-bg.jpg" alt="Інтер'єр клініки LONO — простір з природним світлом">
           </div>
-          <div class="hero-cta">
-            <a href="#contact-form" class="btn btn-primary">Записатись на консультацію</a>
-          </div>
-        </div>
-      </div>
-      <!-- Slide 2 -->
-      <div class="hero-slide">
-        <div class="hero-bg">
-          <img src="assets/images/hero-bg.jpg" alt="Клініка LONO — сучасна лабораторія">
-        </div>
-        <div class="hero-content">
-          <div class="hero-text">
-            <p class="hero-subtitle">Досвідчена команда · Сучасна лабораторія</p>
-            <h2 class="hero-title">Діагностика та лікування<br>жіночого безпліддя</h2>
-            <p class="hero-description">Від першої консультації до позитивного результату — індивідуальний план для кожної пари</p>
-          </div>
-          <div class="hero-cta">
-            <a href="#packages" class="btn btn-primary">Переглянути пакети</a>
+          <div class="hero-content">
+            <div class="hero-text">
+              <p class="hero-subtitle">Клініка жіночого здоров'я та репродуктології · Львів</p>
+              <h1 class="hero-title">Знайдемо причину<br>Допоможемо стати батьками</h1>
+              <p class="hero-description">Репродуктивне та жіноче здоров'я з системним підходом і персональним супроводом</p>
+            </div>
+            <div class="hero-cta">
+              <a href="#contact-form" class="btn btn-primary">Записатись на консультацію</a>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- Slide 3 -->
-      <div class="hero-slide">
-        <div class="hero-bg">
-          <img src="assets/images/hero-bg.jpg" alt="Клініка LONO — консультація з лікарем">
-        </div>
-        <div class="hero-content">
-          <div class="hero-text">
-            <p class="hero-subtitle">Гінекологія · Репродуктологія · Ембріологія</p>
-            <h2 class="hero-title">Повний спектр послуг<br>в одній клініці</h2>
-            <p class="hero-description">Профілактика, діагностика, лікування та супровід — без черг і поспіху</p>
+        <!-- Slide 2: Акція / сезонна пропозиція -->
+        <div class="hero-slide">
+          <div class="hero-bg">
+            <img src="assets/images/hero-bg.jpg" alt="Клініка LONO — гінекологічний чекап">
           </div>
-          <div class="hero-cta">
-            <a href="#services" class="btn btn-primary">Наші послуги</a>
+          <div class="hero-content">
+            <div class="hero-text">
+              <p class="hero-subtitle">Акція до кінця квітня · Гінекологічний чекап</p>
+              <h2 class="hero-title">Комплексне обстеження<br>за спеціальною ціною</h2>
+              <p class="hero-description">Огляд гінеколога, УЗД, аналізи та консультація — все за одне відвідування</p>
+            </div>
+            <div class="hero-cta">
+              <a href="#packages" class="btn btn-primary">Дізнатись вартість</a>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 3: Експертиза команди -->
+        <div class="hero-slide">
+          <div class="hero-bg">
+            <img src="assets/images/hero-bg.jpg" alt="Команда лікарів клініки LONO">
+          </div>
+          <div class="hero-content">
+            <div class="hero-text">
+              <p class="hero-subtitle">15+ років досвіду · Понад 3 000 успішних програм ЕКЗ</p>
+              <h2 class="hero-title">Команда, якій<br>довіряють результат</h2>
+              <p class="hero-description">Репродуктологи, ембріологи та гінекологи з міжнародною практикою</p>
+            </div>
+            <div class="hero-cta">
+              <a href="#about" class="btn btn-primary">Познайомитись з командою</a>
+            </div>
           </div>
         </div>
       </div>
@@ -2533,18 +2527,18 @@
   <script>
     /* ===== Hero Slider ===== */
     (() => {
-      const slides = document.querySelectorAll('.hero-slide');
+      const track = document.getElementById('hero-track');
+      const slides = track.querySelectorAll('.hero-slide');
       const dots = document.querySelectorAll('.hero-dot');
       let current = 0;
       let interval;
       const DELAY = 6000;
 
       const goTo = (index) => {
-        slides[current].classList.remove('active');
         dots[current].classList.remove('active');
         current = index;
-        slides[current].classList.add('active');
         dots[current].classList.add('active');
+        track.style.transform = `translateX(-${current * 100}%)`;
       };
 
       const next = () => goTo((current + 1) % slides.length);
