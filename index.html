@@ -586,12 +586,14 @@
       flex-direction: column;
       justify-content: flex-end;
       padding: var(--space-80);
+      overflow: hidden;
     }
 
     .hero-bg {
       position: absolute;
       inset: 0;
       z-index: 0;
+      overflow: hidden;
     }
 
     .hero-bg img {
@@ -599,7 +601,7 @@
       height: 100%;
       object-fit: cover;
       transform: scale(1.08);
-      transition: transform 6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: transform 8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     .hero-slide.active .hero-bg img {
@@ -728,7 +730,7 @@
 
     .hero-dot.active::after {
       transform: scaleX(1);
-      transition: transform 5s linear;
+      transition: transform 8s linear;
     }
 
     .hero-dot:hover {
@@ -2587,7 +2589,7 @@
       const originalSlides = [...track.querySelectorAll('.hero-slide')];
       const dots = document.querySelectorAll('.hero-dot');
       const total = originalSlides.length;
-      const DELAY = 5200; /* slightly longer than 5s progress bar */
+      const DELAY = 8200; /* slightly longer than 8s progress bar */
       let current = 0;
       let interval;
       let transitioning = false;
