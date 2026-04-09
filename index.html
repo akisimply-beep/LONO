@@ -572,7 +572,11 @@
     .hero-track {
       display: flex;
       height: 100%;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hero-track.no-transition {
+      transition: none;
     }
 
     .hero-slide {
@@ -594,6 +598,12 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transform: scale(1.08);
+      transition: transform 6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .hero-slide.active .hero-bg img {
+      transform: scale(1);
     }
 
     .hero-bg::after {
@@ -606,15 +616,46 @@
     .hero-content {
       position: relative;
       z-index: 1;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: var(--radius-md);
       padding: var(--space-24);
       display: flex;
       flex-direction: column;
       gap: var(--space-32);
       max-width: 753px;
+    }
+
+    /* Staggered content reveal — premium feel */
+    .hero-slide .hero-subtitle,
+    .hero-slide .hero-title,
+    .hero-slide .hero-description,
+    .hero-slide .hero-cta {
+      opacity: 0;
+      transform: translateY(24px);
+      filter: blur(4px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hero-slide.active .hero-subtitle {
+      opacity: 1; transform: translateY(0); filter: blur(0);
+      transition-delay: 0.3s;
+    }
+    .hero-slide.active .hero-title {
+      opacity: 1; transform: translateY(0); filter: blur(0);
+      transition-delay: 0.5s;
+    }
+    .hero-slide.active .hero-description {
+      opacity: 1; transform: translateY(0); filter: blur(0);
+      transition-delay: 0.7s;
+    }
+    .hero-slide.active .hero-cta {
+      opacity: 1; transform: translateY(0); filter: blur(0);
+      transition-delay: 0.85s;
     }
 
     .hero-text {
@@ -651,32 +692,47 @@
       padding: 0 var(--space-32);
     }
 
-    /* Hero slider dots */
+    /* Hero slider indicators — premium progress bars */
     .hero-dots {
       position: absolute;
       bottom: var(--space-32);
       right: var(--space-32);
       z-index: 2;
       display: flex;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
     }
 
     .hero-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
+      width: 32px;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.25);
       border: none;
       padding: 0;
       cursor: pointer;
-      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s ease;
     }
 
-    .hero-dot.active {
-      width: 24px;
-      border-radius: 4px;
+    .hero-dot::after {
+      content: '';
+      position: absolute;
+      inset: 0;
       background: var(--white-solid);
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    .hero-dot.active::after {
+      transform: scaleX(1);
+      transition: transform 5s linear;
+    }
+
+    .hero-dot:hover {
+      background: rgba(255, 255, 255, 0.45);
     }
 
     /* ===== Section Titles ===== */
@@ -2525,23 +2581,93 @@
   </div>
 
   <script>
-    /* ===== Hero Slider ===== */
+    /* ===== Hero Slider (infinite loop) ===== */
     (() => {
       const track = document.getElementById('hero-track');
-      const slides = track.querySelectorAll('.hero-slide');
+      const originalSlides = [...track.querySelectorAll('.hero-slide')];
       const dots = document.querySelectorAll('.hero-dot');
+      const total = originalSlides.length;
+      const DELAY = 5200; /* slightly longer than 5s progress bar */
       let current = 0;
       let interval;
-      const DELAY = 6000;
+      let transitioning = false;
 
-      const goTo = (index) => {
-        dots[current].classList.remove('active');
-        current = index;
-        dots[current].classList.add('active');
-        track.style.transform = `translateX(-${current * 100}%)`;
+      /* Clone first and last slides for seamless loop */
+      const firstClone = originalSlides[0].cloneNode(true);
+      const lastClone = originalSlides[total - 1].cloneNode(true);
+      firstClone.classList.add('hero-slide-clone');
+      lastClone.classList.add('hero-slide-clone');
+      track.appendChild(firstClone);
+      track.insertBefore(lastClone, track.firstChild);
+
+      /* Now track has: [lastClone, slide0, slide1, slide2, firstClone] */
+      /* Position 0 = lastClone, 1 = slide0, 2 = slide1, 3 = slide2, 4 = firstClone */
+      const setPos = (idx, animate) => {
+        if (!animate) track.classList.add('no-transition');
+        track.style.transform = `translateX(-${(idx + 1) * 100}%)`;
+        if (!animate) {
+          track.offsetHeight; /* force reflow */
+          track.classList.remove('no-transition');
+        }
       };
 
-      const next = () => goTo((current + 1) % slides.length);
+      const updateActive = () => {
+        track.querySelectorAll('.hero-slide').forEach(s => s.classList.remove('active'));
+        /* +1 offset because of prepended lastClone */
+        const allSlides = track.querySelectorAll('.hero-slide');
+        allSlides[current + 1]?.classList.add('active');
+        /* Also activate clone if at boundaries */
+        if (current === 0) lastClone.classList.remove('active');
+        if (current === 0) firstClone.classList.remove('active');
+        dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      };
+
+      const goTo = (index, animate = true) => {
+        if (transitioning) return;
+        current = index;
+        setPos(current, animate);
+        updateActive();
+      };
+
+      /* Handle seamless jump after transition to clone */
+      track.addEventListener('transitionend', () => {
+        transitioning = false;
+        if (current >= total) {
+          current = 0;
+          setPos(current, false);
+          updateActive();
+        } else if (current < 0) {
+          current = total - 1;
+          setPos(current, false);
+          updateActive();
+        }
+      });
+
+      const next = () => {
+        if (transitioning) return;
+        transitioning = true;
+        current++;
+        setPos(current, true);
+        /* Update dots with wrapped index */
+        const dotIdx = current >= total ? 0 : current;
+        dots.forEach((d, i) => d.classList.toggle('active', i === dotIdx));
+        /* Update active class for content animations */
+        track.querySelectorAll('.hero-slide').forEach(s => s.classList.remove('active'));
+        const allSlides = track.querySelectorAll('.hero-slide');
+        allSlides[current + 1]?.classList.add('active');
+      };
+
+      const prev = () => {
+        if (transitioning) return;
+        transitioning = true;
+        current--;
+        setPos(current, true);
+        const dotIdx = current < 0 ? total - 1 : current;
+        dots.forEach((d, i) => d.classList.toggle('active', i === dotIdx));
+        track.querySelectorAll('.hero-slide').forEach(s => s.classList.remove('active'));
+        const allSlides = track.querySelectorAll('.hero-slide');
+        allSlides[current + 1]?.classList.add('active');
+      };
 
       const startAuto = () => {
         clearInterval(interval);
@@ -2550,7 +2676,7 @@
 
       dots.forEach((dot, i) => {
         dot.addEventListener('click', () => {
-          if (i === current) return;
+          if (i === current || transitioning) return;
           goTo(i);
           startAuto();
         });
@@ -2559,24 +2685,27 @@
       /* Swipe support */
       const container = document.querySelector('.hero-container');
       let startX = 0;
-      let dragging = false;
+      let swiping = false;
 
       container.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
-        dragging = true;
+        swiping = true;
       }, { passive: true });
 
       container.addEventListener('touchend', (e) => {
-        if (!dragging) return;
-        dragging = false;
+        if (!swiping) return;
+        swiping = false;
         const diff = startX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 50) {
-          if (diff > 0) goTo((current + 1) % slides.length);
-          else goTo((current - 1 + slides.length) % slides.length);
+          diff > 0 ? next() : prev();
           startAuto();
         }
       }, { passive: true });
 
+      /* Init: position on first real slide */
+      setPos(0, false);
+      originalSlides[0].classList.add('active');
+      dots[0].classList.add('active');
       startAuto();
     })();
 
